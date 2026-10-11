@@ -291,8 +291,8 @@ and keywords authorize no unrequested commit, push or external effect.
 
 See the [native ownership/activation matrix](docs/capabilities.md#native-ownership-and-activation--omp-1889)
 for pinned sources and retained specializations, and the
-[execution receipt](docs/verification.md#native-ownership-and-minimum-duplication-execution)
-for observed results and authentication-blocked behavior.
+[latest execution receipt](docs/verification.md#final-reconciliation-and-authenticated-runtime-verification--2026-10-11)
+for reconciled installation, authenticated results and remaining compatibility/provenance limits.
 
 ### Optional Vibe execution
 

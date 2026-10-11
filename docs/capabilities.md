@@ -129,14 +129,14 @@ Coupling is upgrade cost, not a vulnerability or removal mandate.
 
 The installed release is bound to upstream revision
 [`fa5ff4a3a977a28b93d025f4cf50f046e019f18c`](https://github.com/can1357/oh-my-pi/tree/fa5ff4a3a977a28b93d025f4cf50f046e019f18c).
-“Sufficient” below describes the pinned source contract, not demonstrated model
-adherence. [The scoped receipt](verification.md#native-ownership-and-minimum-duplication-execution)
-distinguishes static checks, installed observations and authentication-blocked cases.
+“Sufficient” below describes the pinned source contract, not universal model
+adherence. [The latest scoped receipt](verification.md#final-reconciliation-and-authenticated-runtime-verification--2026-10-11)
+records reconciled installed payloads, authenticated passes and remaining proof limits.
 The global compatibility record retains its prior basis and REVIEW REQUIRED status.
 
 | Capability | Owner/classification | Minimum disposition and activation | Required proof boundary |
 |---|---|---|---|
-| `ultrathink` | Native sufficient [K] | Inherit enabled defaults; explicit per-turn invocation. Auto effort may use the current model's maximum; fixed medium stays fixed; no model switch | Prose/negative matching, medium versus auto and actual unchanged model; authenticated behavior blocked |
+| `ultrathink` | Native sufficient [K] | Inherit enabled defaults; explicit per-turn invocation. Auto effort may use the current model's maximum; fixed medium stays fixed; no model switch | Authenticated matching controls and medium/auto model-preservation cases pass in the latest receipt |
 | `orchestrate` | Native partial [K,T]; mandatory contracts local | Keep enabled; native decomposition/dispatch, one narrow exception for required slow/security/approval/one-writer contracts; no handler or second engine | Single required slow despite one-off guidance, controlled saturation ≤3, final acceptance and no unrequested commit |
 | `workflowz` | Native scheduler/helpers sufficient [K,E,T]; specialist substitute insufficient | Keyword enabled; requires reachable deliberately enabled Eval plus task; no custom pool | Default Eval gate; opt-in accounting, reuse and dependent aggregate; reused workers cannot satisfy fresh security phases |
 | `jevify` | Native classification sufficient [K,E]; security assurance insufficient | Keyword enabled; selective Eval opt-in, synthetic or authorized homogeneous units and frozen rubric | Complete eligible-set/error accounting and actual judge route; unflagged items still receive required source review |
@@ -148,13 +148,13 @@ The global compatibility record retains its prior basis and REVIEW REQUIRED stat
 | `scout` / `reviewer` / `security-reviewer` | Native partial [T]; local source/schema/phase specializations | Retain named contracts; fresh independent security discovery/refutation, complete coverage and effective dispatched-definition provenance | Fresh IDs, recorded definition/prompt/tools/model, source operations/digests and semantic terminals; classification is not refutation |
 | `advisor` | Native partial; local evidence-only/no investigation | Explicit-only; automatic advisor remains off | No automatic dispatch or substitution for source-inspecting review |
 | PERSONALITY / managed AGENTS | Native partial; local model/decision/safety/conditional selection | Consolidate ordinary ownership in PERSONALITY and link it from AGENTS; remove duplicated Vibe recipes | Zero-worker ordinary countercase and conditional documentation-dependent readiness; no suite reactivation when disabled |
-| Eval availability and approval | Native partial [E,A]; host execution exceeds Bash-pattern boundary | Both backends off globally; deliberate session-only opt-in, `tools.approval.eval: prompt`, no provisioning in probes | Default roster observed absent; JS overlay observed reachable; approval/denial/headless execution still requires authenticated tool calls |
+| Eval availability and approval | Native partial [E,A]; host execution exceeds Bash-pattern boundary | Both backends off globally; deliberate session-only opt-in, `tools.approval.eval: prompt`, no provisioning in probes | Default absent roster, native denial/per-call approval and synthetic JS workpool/judge execution pass; actual judge route remains unproven |
 | `luna-tool-boundary.js` | Native insufficient for exact live provider/model workspace gate | Keep unchanged; not a worker router or sandbox | Handler cases plus installed allowed/restricted identity and legitimate Plan paths |
 | Native approvals / Bash protections | Native policy resolver sufficient [A] | Preserve yolo and explicit prompt/deny rules; sole approval interaction | Benign protected targets, declined Git prompt and child fail-closed; no destructive or interpreter-escape probe |
 | Telemetry opt-out | Native partial; inherited third-party opt-outs local | Keep privacy payload and extension unchanged | Installer/environment coverage; no optional service activation |
 | RTK / Herdr | Native insufficient for external protocol consumers | Preserve opt-in/environment gating and bodies; not dispatch engines | Existing source/process limits and unresolved licensing provenance remain; no external startup |
 | Anti Slop | Native insufficient for conditional UI/copy filter | Preserve behavior/license; no orchestration ownership | Existing positive/negative handler suite, not authenticated UI proof |
-| OpenDesign commands / MCP | Native insufficient for daemon lifecycle/prerequisites | Preserve user-invoked commands/declarations; no custom mode handler | Existing prerequisites/source limits; no daemon/MCP/network activation in these probes |
+| OpenDesign commands / MCP | Native insufficient for daemon lifecycle/prerequisites | Preserve user-invoked commands/declarations; no custom mode handler | Initial probe attempted startup and failed; corrected fixtures suppressed both MCP entries natively; production prerequisites remain unverified |
 | Documentation/planning/security skills | Native partial; whole-boundary readiness/source-evidence procedures local | Preserve conditional suite, seven-field brief, disabled-suite fallback and security lifecycle | Lightweight and documentation-first controls; native Plan tools do not replace readiness or independent validation |
 | Repository-root AGENTS | Native insufficient for deployment architecture/QA rules | Preserve unchanged; checkout rules are distinct from deployed runtime guidance | Actual installer/doctor QA, not an application build |
 

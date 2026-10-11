@@ -1,5 +1,138 @@
 # Verification and current limits
 
+## Final reconciliation and authenticated runtime verification — 2026-10-11
+
+**Assessment: installed payload reconciled; authenticated core behavior passes;
+18.8.9 compatibility promotion remains BLOCKED / REVIEW REQUIRED.** This receipt
+supersedes the earlier authentication-blocked observations for the cases exercised
+below, not their unexercised safety or platform boundaries.
+
+### Basis and reconciliation
+
+Initial checkout was clean at `4e3357790be0b505cfd96ee9e3d47ec178d383fb`.
+Installed `omp --version` returned **18.8.9**, pinned to
+[`fa5ff4a3a977a28b93d025f4cf50f046e019f18c`](https://github.com/can1357/oh-my-pi/tree/fa5ff4a3a977a28b93d025f4cf50f046e019f18c).
+The installed binary SHA-256 was
+`cacc12d5cdd46ff207f3452b36a0d0cfa7c5b8aee0d403aa83c5ab1f46bccb58`,
+matching the earlier binary receipt. Repository payload and installed payload
+were checked separately; a clean checkout did not imply an up-to-date installation.
+
+**PASS — reconciliation.** All eight reported differences still existed. Every
+installed file was byte-identical to a historical tracked payload; no unexplained
+customization or source conflict was found. The affected files were
+`config/agent/config.yml`, `AGENTS.md`, `PERSONALITY.md`, and workflow-delivery's
+`SKILL.md`, `SOURCES.md`, `references/implementation-brief.md`,
+`references/planning.md`, and `references/verification.md`. Here the latter paths
+are relative to their respective managed agent/skill directories.
+
+Reviewed `sh install.sh --dry-run --home /home/personal`: exactly eight replacements,
+all other mapped files unchanged. Applied the existing installer, which preserved
+original bytes in collision-safe backups with suffixes `.bak.20261011T055529Z`,
+`.bak.20261011T055530Z`, and `.bak.20261011T055531Z`. Backup hashes matched the
+pre-install originals. Subsequent doctor exited **0**, managed summary **healthy**;
+all **294** mapped destinations matched their repository sources. Telemetry
+profile stanzas remained unchanged. Unmanaged entries and the legacy `.agent/skills`
+and `.agents/skills` roots were retained, including their doctor advisories.
+No managed repository payload was edited or legacy state deleted.
+
+### Authenticated runtime outcomes
+
+Probes used the existing live-home native `openai-codex` authentication, disposable
+synthetic project fixtures, `--no-session`, and allowlisted runtime metadata.
+Credentials were not inspected, copied, printed, persisted, or exported for testing.
+The previous isolated-HOME authentication failures are not a general provider
+failure: these live-home requests authenticated successfully. A transient provider
+usage-limit interruption occurred; subsequent requests completed successfully.
+
+| Case | Status | Observed evidence and boundary |
+|---|---|---|
+| Ordinary default and zero workers | PASS | Unforced launch resolved `openai-codex/gpt-6-luna`, medium, completed the simple turn, with native roster count zero |
+| `ultrathink` matching | PASS | Positive invocation emitted `ultrathink-notice`; inline/fenced code, substring, uppercase, XML and comment controls did not activate it |
+| Fixed versus automatic effort | PASS | Fixed medium remained medium; auto moved from high to max; native state preserved Luna in both cases |
+| `orchestrate` selective dispatch | PASS | Native notice, two independent reader starts before their completions, actual Luna child messages; separate decision fixture exercised integration and main acceptance |
+| Mandatory bounded consultation | PASS | Exactly one dispatched `slow`, named `ApiRemovalDecision`, no model override; native model/thinking entries and `session_init` resolved `openai-codex/gpt-6.1-sol:medium`; Luna resumed the edit and verification |
+| Effective managed workers | PASS | Recorded effective prompts contain the exact managed slow/task bodies; slow is read-only, both have empty spawn permissions and no task tool; task worker entries resolve `openai-codex/gpt-6-luna:medium` |
+| Actual main verification | PASS | Luna changed only synthetic `double.js`; Node independently confirmed `double(7)=14` and `double(-3)=-6`, exit 0 |
+| Global Eval gate | PASS | Default roster lacked Eval; installed `eval.js=false`, `eval.py=false`; native approval policy remained `{"eval":"prompt"}` |
+| Session-only Eval approval | PASS | JS-only overlay, `autoProvision:false`; actual native denial returned `Tool call denied by user: eval`; per-call native approval then allowed `print(1 + 1)` to return `2` |
+| `workflowz` native workpool | PASS | Native notice; actual drained pool snapshots/results, four completed, zero failed/cancelled, even=2/odd=2; configured limit and observed peak active children both 3; one worker reused for the fourth item |
+| `jevify` native classification | PASS | Native notice and `judgeBatch`; frozen integer-parity rubric, complete eligible set 0–19, 20 correct results, zero errors; separate two-item provenance probe also completed |
+| Actual judge provider/model | BLOCKED | Batch route/metadata were null; dedicated subscribed RPC probe exposed no child lifecycle/model/transcript records. Successful labels and main Luna metadata are not judge-route proof |
+| Native Plan/Vibe interaction | PASS | Real TUI enabled/disabled Vibe, enabled Plan, rejected Vibe with `Exit plan mode first`; authenticated Plan inspection completed with fixture bytes unchanged |
+| Complete Plan enforcement/approval receipt | BLOCKED | Parent/child denied-write tests followed by native-approved execution were not completed; activation and read-only inspection alone do not close this boundary |
+| Fresh specialist security phases | NOT APPLICABLE | Synthetic arithmetic/classification is not a security review; no reused pool actor or judge was accepted as independent discovery/refutation |
+
+The slow effective-definition SHA-256 was
+`ebddc465c0eb604d4a2d3a463a7924b93c1e89d5d5a1b1876d9f85f735759826`;
+task's was `9258a0bb809e80a5d10f6c020d9471a549fc394f042f4e543ad1e1cd1736e696`.
+Native initialization records do not emit a source pathname: exact managed-body
+matching and prompt hashes establish the recorded effective content, not a
+fabricated native source-path field. Slow's only actual tool call was `yield`;
+pool children likewise used only `yield`. Luna retained sole fixture-write ownership.
+No commit, push, package provisioning, custom scheduler/judge/router or permanent
+runtime test machinery was introduced.
+
+**FAIL — initial probe isolation.** The first live-home probe attempted the configured
+GitHub MCP connection and OpenDesign subprocess before isolation was corrected.
+It returned MCP/startup errors; this is not evidence that those integrations work.
+Subsequent fixtures used supported project-level same-name `enabled:false`
+overrides, which suppress connection before deduplication. They inherited native
+authentication without editing global MCP settings and reported no MCP warnings.
+This correction applies to verification fixtures, not production integration policy.
+RTK/Herdr were not activated. One RPC `/plan` attempt invoked the model instead of
+proving mode entry; it was excluded from Plan acceptance. An initial TUI harness
+header timeout was corrected by setting terminal dimensions and accepting the
+live catalog's Luna label; the real mode-marker run exited 0. An early Eval harness
+cancelled approval dialogs because it expected a different option label; those
+cancellations were not classified as runtime defects.
+
+### Compatibility, retained ownership and checks
+
+**BLOCKED — upgrade promotion; REVIEW REQUIRED retained.**
+`bun scripts/check-omp-compat.mjs --candidate latest --inspect-main` exited **2**.
+The compatibility record remains at reviewed/verified **18.8.7**; no partial
+receipt was promoted. Exact release-source comparison found:
+
+- [`main.ts`](https://github.com/can1357/oh-my-pi/blob/fa5ff4a3a977a28b93d025f4cf50f046e019f18c/packages/coding-agent/src/main.ts): two fork sites add `repairInterruptedTail:true`.
+- [`model-resolver.ts`](https://github.com/can1357/oh-my-pi/blob/fa5ff4a3a977a28b93d025f4cf50f046e019f18c/packages/coding-agent/src/config/model-resolver.ts): automatic fallback prefers an account-discovered provider default; explicit CLI/configured selection remains before that path.
+- [`extensions/types.ts`](https://github.com/can1357/oh-my-pi/blob/fa5ff4a3a977a28b93d025f4cf50f046e019f18c/packages/coding-agent/src/extensibility/extensions/types.ts): additive optional `openTerminal` UI interface.
+- Magic-keyword source is byte-identical; the other gate-listed release surfaces
+  did not change. Upstream-main warnings were kept separate from the installed release.
+
+No confirmed configuration regression was found. The outstanding full Plan
+enforcement/approval receipt prevents claiming all required upgrade acceptance.
+Judge-route provenance is an additional verification limitation. Concurrency
+evidence covers the exercised native workpool, not an aggregate OS/process limit
+across all dispatch mechanisms. Nested hostile delegation, protected Git denial,
+Vibe continuation/cancellation and independent security phases were not freshly
+exercised; retain their existing policy/source boundaries rather than infer passes.
+
+**PASS — scoped duplication/safety review.** Native OMP still owns dispatch,
+model resolution, keyword handlers, workpool and classification mechanics.
+PERSONALITY/AGENTS, Candidate C append, named agents, conditional workflow skills,
+privacy opt-outs and exact live-model extension gates retain non-equivalent policy
+or specialization responsibilities. No further removable duplication was proven;
+none was deleted. Automatic advisor/fallback, global Eval and third-party license/
+attribution payloads were unchanged.
+
+Fresh checks all exited **0**: `python3 scripts/test_install.py`,
+`bun scripts/test_agent_config.mjs`, `node scripts/test_model_routing.mjs`,
+`bun scripts/test_omp_compat.mjs`, `bun scripts/test_skill_catalog.mjs`,
+`bun scripts/test_document_locations.mjs`, `node scripts/test_antislop.mjs`,
+and the post-install doctor. These are not authenticated actor proof. Separate
+PowerShell/native-Windows verification was not run.
+
+Temporary allowlisted evidence is under `/tmp/omp-final-reconciliation-2b8uqz`
+(`drift-classification.json`, `backups.json`, `managed-parity.json`, `checks.json`,
+`source-review.json`, `slow-provenance-runtime.json`, `effective-worker-provenance.json`,
+`eval-runtime.json`, `eval-approved-runtime.json`, `pool-provenance-runtime.json`,
+`judge-provenance-runtime.json`, `tui-plan-verified-runtime.json`). Earlier authenticated
+keyword/unforced evidence is under `/tmp/omp-native-auth-safe`.
+The independent throwaway receipt validator passed actual slow lifecycle,
+effective worker content, Node outcomes, pool accounting, all 20 judge labels and
+the real TUI markers. Temporary evidence is not a portable committed artifact.
+Repository changes from this task are limited to the verification/overview records.
+
 ## Native capability revalidation — 2026-10-11
 
 Checkout `HEAD` was `cc0288eeaf816d547da792c024f3fbda0074da6b`; `git status
