@@ -390,8 +390,9 @@ user plugin state are not managed.
 | [mcp.json](config/agent/mcp.json) | Machine-provided MCP credentials/executable references |
 | [scripts/](scripts/), `install.*` | Deployment, inventory, static contracts, and executable hook checks |
 
-OMP owns the full system prompt. The recorded OMP 18.8.7 path appends the
-narrow `APPEND_SYSTEM.md` clarification without replacing native content;
+OMP owns the full system prompt. The verified `known-patched` path in the
+[compatibility record](config/agent/omp-compatibility.yml) appends the narrow
+`APPEND_SYSTEM.md` clarification without replacing native content;
 PERSONALITY remains the owner of required `slow` conditions. The compatibility
 checker fingerprints this append and requires no active `SYSTEM.md` or
 `SYSTEM_TEMPLATE.md` override. Prompt changes apply to fresh sessions.
@@ -655,18 +656,24 @@ and an active `SYSTEM.md`/`SYSTEM_TEMPLATE.md` blocks the known verified path.
 
 ## Verification and known limits
 
-The [compatibility record](config/agent/omp-compatibility.yml) pins reviewed and
-verified OMP **18.8.7** in `known-patched` append mode. Recorded probes cover
-direct Luna work, a bounded Luna → slow/Sol → Luna decision, a representative
-large-but-clear request staying on Luna, and Plan Mode activation—not full
-plan execution or approval. Earlier approval-specific **18.8.0** and broader
-discovery/architecture **18.6.3** evidence remain historical and scoped
-(18.6.3 source `093275112f7adff207608673c0e33c7f3d16e27f`).
-None is a minimum-version or future-compatibility guarantee.
+The [compatibility record](config/agent/omp-compatibility.yml) now records
+reviewed and verified OMP **18.8.9** in `known-patched` append mode for the
+current managed Candidate C configuration. The
+[latest scoped receipt](docs/verification.md#final-plan-enforcement-judge-provenance-and-compatibility-verification--2026-10-11)
+records fixture safety and an approved synthetic judge batch whose completed
+item and final status report Luna as the declared result model—not hidden
+service-side routing.
+
+The native Plan lifecycle passed: parent preapproval write denial, read-only
+child admission, native approval, and approved parent write/readback. The first
+observer's BLOCKED result was a harness false negative: omitted child `yield`
+and assumed a trailing newline; the actual write was exactly five bytes
+`AFTER`. The independent native-receipt validator passed all 16 criteria.
+Existing direct Luna and Luna → slow/Sol → Luna evidence remains scoped and
+historical; it is not a minimum-version or future-compatibility guarantee.
 [The upgrade gate](config/agent/skills/docs-engineering/references/omp-compatibility.md)
 and [verification records](docs/verification.md) distinguish static, handler,
 native-runtime, and authenticated evidence.
-
 Run `python3 scripts/test_install.py` for the production POSIX integration
 checks. `pwsh -NoProfile -File scripts/test_telemetry_install.ps1` covers the
 PowerShell telemetry install path, including UTF-16 profile preservation; it

@@ -8,6 +8,11 @@ The adopted entrypoint removes staging-only and preserve-incumbents restrictions
 
 The documentation-first update links the original project-delivery baseline owner from selection, sequence, context and audit rather than duplicating its gate. Authorized setup/create prepares necessary intended information; maintain reconciles every affected owner against sources and observed evidence. Operations/user guidance separates pre-code plans from later actual outcomes. The standards map is original public-metadata/abstract-based guidance with explicit access limits and the 15289:2019-to-12207:2017/15288:2015 edition boundary, not ISO conformity. Catalog bytes/IDs/schema, manifest v1, trace fields/relations, four profiles and all seven templates remain unchanged.
 
+The compatibility reference resolves mutable reviewed/runtime state through the
+existing machine record and its cited verification evidence. Dated source checks
+remain historical; no new model, approval, installation or runtime mechanism is
+introduced.
+
 ## Adapted licensed source
 
 Repository: https://github.com/open-gsd/gsd-core

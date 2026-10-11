@@ -10,11 +10,19 @@ Current outcomes live in the source checkout's `docs/verification.md`, which is
 not deployed as part of this skill package.
 
 
-## Candidate C prompt and compatibility state (checked 2026-10-10)
+## Candidate C prompt and compatibility state
 
-Installed OMP and latest stable are **18.8.7**, release tag revision
+For current reviewed source, prompt mode and runtime receipts, read
+`omp-compatibility.yml` beneath the effective agent directory reported by
+`omp config path`. The source checkout's `docs/verification.md` contains the
+record's cited evidence and scope limits. Do not infer current installed or
+latest-stable versions from historical checks below.
+
+### Historical source comparison — 2026-10-10
+
+At this check, installed OMP and latest stable were **18.8.7**, release revision
 [`f261ed9faf16b61880b544f599876bface4ded0d`](https://github.com/can1357/oh-my-pi/tree/f261ed9faf16b61880b544f599876bface4ded0d).
-Current upstream `main` resolves to
+Upstream `main` then resolved to
 [`b07a1c146d0d12cfc855a2c65d52f892ef319040`](https://github.com/can1357/oh-my-pi/commit/b07a1c146d0d12cfc855a2c65d52f892ef319040).
 The check compared exact upstream content for every tracked Candidate C
 surface at both revisions: no hard-critical or watched file changed from the
@@ -97,13 +105,14 @@ version differs from the reviewed source. It is read-only and makes no model
 call. The explicit `workflow-omp-health` skill retains doctor and skill-list
 checks, and `full` runs the focused deterministic repository suite.
 
-Runtime evidence remains separate: the recorded 18.8.7 receipt covers fresh
-Luna-direct, Luna→one slow/Sol bounded decision→Luna, and Plan Mode. Reuse it
-only when the prompt mode and hard-critical sources remain unchanged. Changed
-prompt construction requires prompt-discovery and applicable Luna routing
-probes; task dispatch changes require the bounded slow dispatch probe; Plan
-Mode changes require its own probe. Provider/authentication evidence is not
-inferred from static config or source hashes. Do not replay unchanged cases
+Runtime evidence remains separate: use the record's `last_verified` evidence
+for Luna-direct, Luna→one slow/Sol bounded decision→Luna, and Plan Mode,
+retaining each receipt's actual version, scope and limits. Reuse a receipt only
+when its prompt mode and relevant hard-critical contracts remain applicable.
+Changed prompt construction requires prompt-discovery and applicable Luna
+routing probes; task dispatch changes require the bounded slow dispatch probe;
+Plan Mode changes require its own probe. Provider/authentication evidence is
+not inferred from static config or source hashes. Do not replay unchanged cases
 just because omp-docflow documentation or unrelated files changed.
 
 The currently reviewed source and runtime receipt remain recorded separately in

@@ -1,5 +1,249 @@
 # Verification and current limits
 
+## Authorized local OMP deployment — 2026-10-11
+
+After the explicit local-deployment request, the installer dry-run identified
+only docs-engineering's `SOURCES.md` and `references/omp-compatibility.md`.
+Both installed originals matched the prior tracked bytes, so no local
+customization was overwritten. The existing installer deployed those two files
+and retained backups with suffix `.bak.20261011T162444Z`.
+
+**PASS:** doctor exited 0 with managed summary **healthy** and all **294**
+mapped destinations consistent. The installed compatibility checker reported
+**VERIFIED**, **known-patched**, OMP **18.8.9**. Native
+`omp read skill://docs-engineering/references/omp-compatibility.md` loaded the
+updated installed guide. This closes the earlier repository-only documentation
+boundary; unrelated/legacy files and model, approval, MCP, Eval and privacy
+settings were unchanged. Actual deployment/check output is `artifact://229`.
+
+
+## Simplicity audit and correction review — 2026-10-11
+
+Basis: `HEAD` `eddcbd49c077f5f53496d0156ae480b92c9e2d87`, **323** tracked
+files, no untracked files, and the existing four-file verification diff.
+Coverage included first-party installers, every `scripts/*` implementation and
+test consumer, deployment/privacy inventory, managed runtime configuration,
+agents, commands, extensions, relevant workflow/compatibility procedures, and
+the changed documentation. Vendored UI implementation internals, unrelated
+skill-body behavior, deep security review and native OMP internals were excluded;
+this is not a repository-wide clean or security-assurance claim.
+
+Three documentary findings were corrected:
+
+- The compatibility reference now reads mutable baseline/receipt state from
+  `omp-compatibility.yml` instead of presenting the old 18.8.7 check as current.
+  Historical source evidence and all upgrade acceptance boundaries are retained.
+- The `jevify` capability row again requires complete eligible-set/error
+  accounting and required source review of unflagged items; a successful route
+  observation does not replace those acceptance criteria.
+- README resolves the verified prompt path through the compatibility record
+  rather than duplicating a version label. The skill's existing `SOURCES.md`
+  records the independently authored documentation adjustment.
+
+No safe behavior-preserving cut was established in the examined deployment or
+runtime code; no wrapper, router, service, security boundary or useful evidence
+was deleted. Correctness/spec review found no remaining issue in the reviewed
+diff after these corrections; excluded behavior remains unreviewed.
+
+**PASS:** OMP 18.8.9's actual non-generating `omp read` loaded the corrected
+repository compatibility reference from the isolated fixture (exit 0).
+**PASS:** `bun scripts/test_document_locations.mjs`,
+`bun scripts/test_skill_catalog.mjs`, `bun scripts/test_omp_compat.mjs` and
+`python3 scripts/test_install.py` completed after the payload edits, exit 0;
+POSIX integration covered all **294** mappings. No authenticated cases were
+replayed, no PowerShell suite was executed, and no test assertion was weakened.
+
+These corrections are repository-only; authoring did not deploy the changed
+compatibility reference or its `SOURCES.md` into the live home. The earlier
+installed-parity receipt below predates these two source-document changes.
+Model, approval, MCP, Eval and privacy configuration remains unchanged.
+No commit or push was performed.
+
+
+## Final Plan enforcement, judge provenance and compatibility verification — 2026-10-11
+
+**ACCEPTED — scoped OMP 18.8.9 verification for the current managed Candidate C
+configuration.** Actual safety, judge-provenance, and native Plan receipts pass
+within their stated boundaries; the compatibility record is promoted for this
+specific configuration and does not claim universal release/platform coverage.
+
+| Criterion | Result | Basis and limit |
+|---|---|---|
+| Installed identity and unchanged payload | PASS | Exact HEAD, binary/source identity, and four critical hashes below; no model override or production-settings change |
+| Safety isolation | PASS | Saved fixture receipt: 13 ordinary tools, zero MCP tools/diagnostics/errors, known precedence only—not universal future-plugin isolation |
+| Judge provenance | PASS | One approved synthetic integer classified EVEN; official item and final status both report Luna; declared result model, not hidden service-side routing |
+| Native Plan parent enforcement | PASS | Native preapproval protected-write denied with `isError:true`; exact `BEFORE` verified before approval |
+| Plan child restrictions | PASS | Child initialized read-only/restrictToolNames with read-only tools plus yield and no mutator; child write invocation N/A because not admitted |
+| Native Plan approval and execution | PASS | Native approval; authorized parent write was exactly five bytes `AFTER`, successful native result and exact readback |
+| Full actual-evidence validator | PASS | Corrected independent validator second run, `artifact://209`, exit 0; all 16 criteria PASS |
+| 18.8.9 source compatibility | PASS | All three narrow source changes reviewed; critical legacy behavior plus required full Plan behavior pass for the current managed configuration |
+| Production MCP policy | NOT APPLICABLE — unchanged | Tradeoffs recorded; no production activation/settings/license changes made |
+| Broader platform, sandbox, hidden routing claims | NOT APPLICABLE | Not established by these bounded fixture receipts |
+
+### Identity and unchanged payload basis
+
+The assigned checkout was clean at `eddcbd49c077f5f53496d0156ae480b92c9e2d87`.
+Installed OMP **18.8.9** has binary SHA-256
+`cacc12d5cdd46ff207f3452b36a0d0cfa7c5b8aee0d403aa83c5ab1f46bccb58`,
+from upstream source `fa5ff4a3a977a28b93d025f4cf50f046e019f18c`. These identity
+facts are not behavioral proof. Existing critical managed payload hashes remain
+unchanged: `config.yml` `2f9e25e4449d6134a312ad5a7c5f153469b440a116b03913496b615361668a42`,
+APPEND `7f504df8c2cdcb9bb378b0685063140e09c9daf60b43d2a0cdff2286cb7a8aa3`,
+MCP `d0d543c2d131b597d38290dd012623188f29316f05dd3c0bf0a6656eb5dadb65`,
+and PERSONALITY `937f1356f3a3c887321f5e45f98a6e191349a1e9973184359079228497f0c9d2`.
+No main-model override, behavioral production-settings change, commit, or push
+occurred. Only compatibility metadata was subsequently deployed as recorded below.
+Previously authenticated keyword, slow, pool, Eval, and reconciliation receipts
+retain their original scoped validity; they were not replayed.
+
+### Actual safety and judge evidence
+
+**PASS — current fixture safety.** The saved receipt
+`/tmp/omp-safety-final/manifest.json` records the official non-generating RPC
+v2 state: zero messages, `isStreaming:false`, 13 ordinary tools, no `mcp__` tools,
+and zero warnings/errors/MCP diagnostics (exit 0). Before startup, disabled
+same-name project MCP transport entries matched canonical
+`~/.omp/agent/mcp.json`; no force-enabled names were present and competing
+ancestors were rejected. Only child-local environment telemetry options were
+used. Metadata access was read-only; there was no auth copy, global MCP write,
+or `--no-extensions`. This proves the recorded fixture and known source
+precedence only—not universal sandboxing or unknown future plugins.
+
+**PASS — judge provenance for the completed batch.** The saved
+`/tmp/omp-judge-final/judge-runtime-receipt.json` and original native artifact
+`artifact://184` record one approved native `judgeBatch` containing one
+synthetic integer, with classification `EVEN`; completed item and final status
+both report `openai-codex/gpt-6-luna`. Native Eval approval was used, Eval was
+not an error, and the run exited 0 without warnings. The same Luna-medium
+main-session metadata is not judge proof; the settled item and status model
+fields are the relevant evidence. This establishes the declared result model,
+not hidden service-side routing.
+
+The earlier observer checked nonexistent `route`/`metadata` fields and omitted
+the actual `item.model` and `status().model`; its nulls were a missing
+observation, not an upstream failure or evidence those fields were null.
+Likewise, an initial harness counted noninteractive `setWidget` as approval
+and the native Eval was denied before any judge execution (artifact
+`artifact://183`). The corrected observation performed one approved batch.
+The pinned [judge role-chain resolver](https://github.com/can1357/oh-my-pi/blob/fa5ff4a3a977a28b93d025f4cf50f046e019f18c/packages/coding-agent/src/config/model-resolver.ts#L1569-L1602)
+and [native judgment execution](https://github.com/can1357/oh-my-pi/blob/fa5ff4a3a977a28b93d025f4cf50f046e019f18c/packages/coding-agent/src/judgment/index.ts#L171-L217)
+use `settings.getModelRole('judge')` and an ordered native candidate chain,
+distinct from disabled `retry.modelFallback`. Observed effective settings have
+no explicit `modelRoles.judge` and `retry.fallbackChains={}`. The
+[official item/status model fields](https://github.com/can1357/oh-my-pi/blob/fa5ff4a3a977a28b93d025f4cf50f046e019f18c/packages/coding-agent/src/eval/judgment-batch-bridge.ts#L42-L97)
+are populated by the [settled result/chain model](https://github.com/can1357/oh-my-pi/blob/fa5ff4a3a977a28b93d025f4cf50f046e019f18c/packages/coding-agent/src/eval/judgment-batch-bridge.ts#L330-L391).
+The bridge does not pass the parent session model as judge identity, and judge
+execution is not an ordinary task child lifecycle. A child-event subscription
+therefore was the wrong observation path, not a routing-failure receipt.
+
+Production MCP autostart trades immediate discovery/convenience for startup
+network/subprocess activity, external-data exposure, and prerequisite-related
+errors; explicit opt-in reduces those exposures and coupling but requires
+additional user action. This records tradeoffs only: production behavior,
+settings, and licenses were not changed.
+
+### Plan and compatibility disposition
+
+**PASS — native Plan lifecycle; independent actual-evidence validation passed.**
+The actual native parent journal is
+`/tmp/omp-plan-final/session-interactive/2026-10-11T11-54-41-490Z_01a12ad0-add2-7573-8893-d00fabeab5c1.jsonl`;
+the accepted plan and child transcript are under
+`/tmp/omp-plan-final/session-interactive/2026-10-11T11-54-08-511Z_01a12ad0-2cff-72fe-ac55-887d0232bb87/`.
+The native protected-write guard denied the parent's preapproval write with
+`isError:true` and its exact denial; `protected.txt` remained `BEFORE`. The
+approved Plan popup's first choice, **Approve and execute**, was selected via
+native Enter. The Plan child initialized read-only with `restrictToolNames:true`,
+`spawns:""`, reader tools plus `yield` (no mutator). The requested child mutation
+could not be invoked because write was not admitted; it read `BEFORE` and yielded.
+After approval, the parent read `BEFORE`, wrote the exact five-byte content `AFTER`,
+received native write success, and reread exact `AFTER`. The native mode-change
+record returned to `none`; model/thinking records remained
+`openai-codex/gpt-6-luna`/medium. The isolated fixture's other contents were
+unchanged and the MCP configuration hash remained the same.
+
+The initial observer's `BLOCKED` classification was a harness false negative:
+its child-tool allowlist omitted legitimate `yield`; it then reported no
+child-write attempt because the child had no admitted mutator. It also assumed
+an unstated trailing newline after `AFTER`, while the approved native write was
+exactly five bytes. Preserve that observer receipt as a record of the observer
+limitations, not a native Plan failure. Direct child write invocation is
+**N/A** because no write tool was admitted; this is an admission restriction,
+not an executed write error.
+
+The first independent validator run (`artifact://208`, exit 2) had one validator
+inventory bug: it classified the explicitly approved `protected.txt` as a
+non-protected workspace path. The corrected validator excludes exactly that
+approved target and rechecks native tool-call/result correlation, pre/post
+approval ordering, child admission, plan artifact binding, fixture contents,
+MCP hash, model/thinking state, and judge receipt. Its second run
+(`artifact://209`) exited **0** with all **16** criteria PASS. The originally
+selected plan artifact is bound by the native local-plan write's resolved path;
+native approval copies identical approved local artifact bytes into the new
+execution session, which is normal clear-context carry-forward, not an extra plan version.
+
+**PASS — compatibility acceptance for the current managed Candidate C
+configuration.** The 18.8.9 source review found: fork-history repair applies to
+new forks and leaves original source sessions unchanged; automatic account
+defaults affect automatic resolution below explicit CLI/config selection; and
+`openTerminal` is an additive optional interface unused by the managed
+extension. Keyword source bytes were identical and the other 23 gate paths
+unchanged. Existing current-configuration Luna-direct and Luna → one-Sol-slow →
+Luna receipts remain valid; the newly accepted full Plan lifecycle closes the
+required Plan boundary. No compatibility claim extends beyond this reviewed
+configuration and exercised cases.
+
+### Changes, deployment and executed checks
+
+Changed repository files are `README.md`, `docs/capabilities.md`,
+`docs/verification.md`, and `config/agent/omp-compatibility.yml`. Only
+`source_reviewed` and `last_verified` metadata changed in the managed record;
+its role policy, critical behaviors, capabilities and append hash stayed intact.
+No custom runtime, keyword handler, router, scheduler, judge, approval mechanism
+or instrumentation was added. No existing implementation was proven redundant
+enough to remove; the local policies and specialized contracts remain justified.
+
+Reviewed `sh install.sh --dry-run --home /home/personal`: exactly one replacement,
+the compatibility metadata, with all other inventory files unchanged. The actual
+installer created `omp-compatibility.yml.bak.20261011T122829Z`; subsequent
+`sh scripts/doctor.sh --check --home /home/personal` exited **0**, managed summary
+**healthy**, with all **294** mappings matching. Existing legacy/unmanaged
+advisories were preserved, not deleted. Repository and installed metadata both
+hash to `cd7fe988a1c5a6760f24d43315003aa8db7c04991a6c80ca37dc72cbf0d3ddc9`;
+the retained backup hashes to
+`06c7a659c9d6b7f40e4989b64ce6e366a1011c1601b4fc5364536030d67bf94c`.
+Production config/MCP hashes still match the unchanged values above.
+
+| Executed check | Result |
+|---|---|
+| `bun scripts/test_omp_compat.mjs` | PASS — prompt precedence/hash, config/receipt drift and hard/watched source boundaries |
+| `bun scripts/test_agent_config.mjs` | PASS — managed model, worker, bounds, fallback/advisor and approval contracts |
+| `node scripts/test_model_routing.mjs` | PASS — six handler cases; not OS containment |
+| `node scripts/test_antislop.mjs` | PASS — 16 positive and 18 negative handler cases |
+| `bun scripts/test_document_locations.mjs` | PASS — 128 canonical artifact paths |
+| `bun scripts/test_skill_catalog.mjs` | PASS — 37 canonical skills, 14 hidden aliases, 294 mappings and 40 notices |
+| `python3 scripts/test_install.py` after all source writers stopped | PASS — POSIX installer/doctor integration for 294 entries |
+| `bun scripts/check-omp-compat.mjs --candidate 18.8.9` in this checkout | PASS — `VERIFIED`, `known-patched`, exact 18.8.9 baseline/revision |
+| `bun /home/personal/.omp/agent/scripts/check-omp-compat.mjs --candidate 18.8.9` in the isolated fixture | PASS — installed effective settings, global append, `VERIFIED` / `known-patched`, exit 0 |
+
+The first suite invocation passed its six deterministic checks but the installer
+suite **FAIL**ed comparing `.omp/agent/omp-compatibility.yml` while that source
+metadata was concurrently being edited. It was not accepted as stable-tree
+evidence. After every writer stopped, the same unmodified seven-check suite
+passed, exit **0**; no test assertion or configuration safety gate was weakened.
+The detached compatibility checks make no provider call and are not the
+authenticated Plan/judge proof; those actual receipts are separately recorded above.
+
+Previously authenticated keyword, slow, pool, Eval, and reconciliation receipts
+remain dated, case-specific evidence and were not replayed. Their old missing
+judge observation and incomplete Plan case are superseded only as specified here.
+No confirmed configuration regression or remaining blocker exists for this scoped
+18.8.9 acceptance. Production MCP autostart risk remains unchanged; hidden
+provider-side routing, universal sandboxing, unrelated plugins and native-Windows
+behavior are not claimed. The POSIX runner noted `powershell.exe` availability
+but did not execute the separate PowerShell tests. Evidence paths are temporary
+and non-portable; no third-party service or telemetry exporter was started.
+
+
 ## Final reconciliation and authenticated runtime verification — 2026-10-11
 
 **Assessment: installed payload reconciled; authenticated core behavior passes;
