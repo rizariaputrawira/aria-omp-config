@@ -26,6 +26,12 @@ function validate(config, definitions) {
   assert.equal(config.defaultThinkingLevel, "medium", `${configPath}: default thinking level`);
   assert.equal(config.task?.eager, "default", `${configPath}: no proactive execution delegation`);
   assert.equal(config.task?.maxConcurrency, 3, `${configPath}: max concurrency`);
+  assert.equal(config.task?.enableEffort, false, `${configPath}: per-task effort disabled`);
+  assert.equal(config.task?.isolation?.enabled, false, `${configPath}: task isolation disabled`);
+  const disabledAgents = config.task?.disabledAgents ?? [];
+  assert.ok(Array.isArray(disabledAgents), `${configPath}: disabled agents list`);
+  assert.ok(disabledAgents.every(name => typeof name === "string"), `${configPath}: disabled agents are strings`);
+  assert.ok(!disabledAgents.includes("slow"), `${configPath}: slow consultation available`);
   assert.equal(config.task?.maxRecursionDepth, 1, `${configPath}: max recursion depth`);
   assert.equal(config.task?.showResolvedModelBadge, true, `${configPath}: resolved model badge`);
   assert.equal(config.tools?.approvalMode, "yolo", `${configPath}: ordinary approval mode`);
@@ -113,6 +119,14 @@ function rejects(name, mutate, expected) {
 }
 rejects("missing definition", (_, defs) => defs.splice(defs.findIndex(([path]) => path.endsWith("/slow.md")), 1), /slow\.md: missing/);
 rejects("malformed frontmatter", (_, defs) => { defs[0][1] = "---\nname: [\n---\n"; }, /config\/agent\/agents\//);
+rejects("per-task effort exposed", (cfg) => { cfg.task.enableEffort = true; }, /per-task effort disabled/);
+rejects("task isolation enabled", (cfg) => { cfg.task.isolation.enabled = true; }, /task isolation disabled/);
+rejects("slow disabled by name", (cfg) => { cfg.task.disabledAgents = "slow"; }, /disabled agents list/);
+rejects("slow disabled by list", (cfg) => { cfg.task.disabledAgents = ["slow"]; }, /slow consultation available/);
+rejects("non-string disabled agent", (cfg) => { cfg.task.disabledAgents = [42]; }, /disabled agents are strings/);
+const unrelatedDisabledAgent = structuredClone(config);
+unrelatedDisabledAgent.task.disabledAgents = ["unrelated-agent"];
+validate(unrelatedDisabledAgent, definitions);
 rejects("duplicate definition", (_, defs) => defs.push(defs[0]), /duplicate agent/);
 rejects("unmapped definition", (_, defs) => defs.push([`${agentDir}/unknown.md`, "---\nname: unknown\n---\n"]), /unknown\.md: unmapped/);
 for (const name of ["slow", "advisor"]) {

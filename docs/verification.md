@@ -1,5 +1,179 @@
 # Verification and current limits
 
+## OMP escalation reliability source and structural review — 2026-10-13
+
+**Overall bounded-matrix result: FAIL; full escalation reliability is not
+verified.** The recorded B01–B12 behavioral snapshot used the pre-final
+candidate `PERSONALITY.md` SHA-256
+`74f02621bda5ef54496e3fae4d7820d161a12de96e7901a4c8ad95324cc68a89`: **1
+PASS, 1 FAIL, 10 BLOCKED**. A final provenance/tool-use acceptance sentence
+was added later; it passed structural and disposable-home checks, but no
+behavioral actor was rerun under that final system prompt. B01 passed on the
+archived incumbent and pre-final candidate guidance; B02 failed on the
+pre-final candidate with a consumer-visible output defect (`total` instead of
+the required `sum`). B03–B12 remain incomplete: current OMP 18.10.3 does not
+admit the native child `yield` contract by default, while this approved
+configuration does not enable `task.structured`; the required slow receipt
+cannot be proven through the plan's accepted native interface. B12's required
+strict-schema proof is likewise unavailable. These are explicit blockers, not
+inferred behavioral passes. No B03–B12 actor was run or result fabricated.
+
+The subsequent bounded simplicity/correctness review covered the eight-file
+working-tree change, not the whole repository. It consolidated duplicate
+dispatch/worker-reporting rules in PERSONALITY, added a non-string
+`disabledAgents` rejection case, and corrected the platform-test statement.
+`bun scripts/test_agent_config.mjs`, `bun scripts/test_document_locations.mjs`,
+and `bun scripts/test_skill_catalog.mjs` passed after those corrections;
+`omp read config/agent/PERSONALITY.md` loaded the corrected source, exit 0.
+This is source-loading and structural evidence, not a new authenticated
+behavioral receipt or installed-home parity. The disposable-home receipt
+predates this cleanup and used PERSONALITY SHA-256
+`247a8f7227cee1fdb8f9884df2feec00a2da11f1bcfd3a0e33340619b0e978da`.
+
+### Runtime, source, and evidence basis
+
+The observed executable is OMP **18.10.3**, SHA-256
+`366ffcda80db57b825921b6ff4b0e5e623bc62cf18478f2828cd8a322fc72ff9`.
+The repository's prior source baseline is OMP 18.8.9 revision
+[`fa5ff4a3a977a28b93d025f4cf50f046e019f18c`](https://github.com/can1357/oh-my-pi/tree/fa5ff4a3a977a28b93d025f4cf50f046e019f18c);
+the inspected 18.10.3 candidate is revision
+[`81e1d8927a3c16cfaff2e9456baa8c060e1e0e9b`](https://github.com/can1357/oh-my-pi/tree/81e1d8927a3c16cfaff2e9456baa8c060e1e0e9b).
+`bun scripts/check-omp-compat.mjs --candidate 18.10.3` exited 2,
+`OMP compatibility: REVIEW REQUIRED`, listing changed hard-critical task,
+model-resolution, settings, and main surfaces plus watched extension/registry/
+bash surfaces. This checker result is distinct from the targeted source review
+and from authenticated behavioral evidence.
+
+The bounded `slow` compatibility decision inspected exact baseline/candidate
+source. The candidate adds `task.structured`, default false, filters `yield`
+from child tools, and disables output-schema resolution unless enabled:
+[setting](https://github.com/can1357/oh-my-pi/blob/81e1d8927a3c16cfaff2e9456baa8c060e1e0e9b/packages/coding-agent/src/task/settings.ts#L258-L270),
+[task result gate](https://github.com/can1357/oh-my-pi/blob/81e1d8927a3c16cfaff2e9456baa8c060e1e0e9b/packages/coding-agent/src/task/index.ts#L727-L741),
+[schema resolution](https://github.com/can1357/oh-my-pi/blob/81e1d8927a3c16cfaff2e9456baa8c060e1e0e9b/packages/coding-agent/src/task/structured-subagent.ts#L233-L248),
+[tool filtering](https://github.com/can1357/oh-my-pi/blob/81e1d8927a3c16cfaff2e9456baa8c060e1e0e9b/packages/coding-agent/src/task/executor.ts#L4040-L4046).
+`config/agent/config.yml` leaves that setting unspecified. OMP 18.10.3
+retains the public RPC v2 transport, task identity/model/effort resolution,
+settlement, and compaction entry point; this supports only observations that
+do not require the removed native result contract. Child lifecycle observers
+must capture IDs and transcript references as events arrive because the
+candidate removes terminal children from the live roster.
+
+The source-only `CurrentRuntimeCompatibility` receipt is accepted for its
+bounded source-inspection decision: native `model_change` and `session_init`
+record `openai-codex/gpt-6.1-sol`, agent/modelRole `slow`, and resolved
+`openai-codex/gpt-6.1-sol:medium`. Its effective tool list also included
+ambient mutative OpenDesign MCP methods beyond `slow.md`'s declared tools;
+inspected assistant call names were only `read`, `grep`, and `glob`. This
+supports the narrow receipt but proves neither enforced read-only capability
+nor least privilege/isolation. The filtered provenance and tool-use evidence
+is retained as `slow-provenance-tools.md` in the private evidence directory.
+
+For local-auth reuse, the inspected candidate source resolves
+[`getAgentDbPath(agentDir)`](https://github.com/can1357/oh-my-pi/blob/81e1d8927a3c16cfaff2e9456baa8c060e1e0e9b/packages/utils/src/dirs.ts#L921-L924)
+to the `agent.db` beneath the effective agent directory, consistent with the
+[candidate auth-store documentation](https://github.com/can1357/oh-my-pi/blob/81e1d8927a3c16cfaff2e9456baa8c060e1e0e9b/docs/auth-broker-gateway.md).
+The staged runs used a filesystem link to that existing store, without reading
+database contents or copying credentials. Each runtime case used a private
+staged HOME/workspace, fixture-only MCP maps with GitHub and OpenDesign
+disabled, `PI_PY=0` / `PI_JS=0`, and staged RTK/Herdr extension omissions. The
+pre-final candidate's non-generating RPC state showed `openai-codex/gpt-6-luna`, Medium,
+settled, two system-prompt block hashes, the expected 13 non-MCP tool names,
+and no captured startup diagnostics. This is configuration/runtime-state
+evidence, not authenticated child-provenance or complete effective-policy
+evidence.
+
+Incumbent snapshot: archived clean `HEAD`
+`e2c1f114b633015744a062912df24a1cb12095fb`; all 17 entries in the saved
+incumbent SHA-256 manifest verified against that tree. Baseline installer and
+doctor reported healthy in a disposable home. In the separate candidate home,
+installer dry-run/install/doctor `--check` exited 0 and managed summary was
+healthy for 294 mappings; the unrelated sentinel survived. RPC turns used a
+fixture state with empty MCP maps, RTK/Herdr copies omitted, and the existing
+`agent.db` linked without reading its contents. A later final candidate install
+synced updated `PERSONALITY.md` and restored canonical managed MCP/extension
+copies; doctor again reported 294 managed mappings healthy. Do not reuse that
+home for RPC until its safe fixture settings are restored. Neither test home
+was real.
+
+| Source | Incumbent SHA-256 | Current reviewed candidate SHA-256 |
+|---|---|---|
+| `config/agent/config.yml` (unchanged) | `2f9e25e4449d6134a312ad5a7c5f153469b440a116b03913496b615361668a42` | same |
+| `config/agent/AGENTS.md` (unchanged) | `aaa5a08aa9b9efdcee7ae4900f385ae12e31be8f97e8a273644e6bb598f46d92` | same |
+| `config/agent/APPEND_SYSTEM.md` (unchanged) | `7f504df8c2cdcb9bb378b0685063140e09c9daf60b43d2a0cdff2286cb7a8aa3` | same |
+| `config/agent/PERSONALITY.md` | `937f1356f3a3c887321f5e45f98a6e191349a1e9973184359079228497f0c9d2` | `ea5c5784f104bc769df12222672deeac37341e2f0b32df3b507d7d17cc10c14b` |
+| `config/agent/agents/task.md` | `9258a0bb809e80a5d10f6c020d9471a549fc394f042f4e543ad1e1cd1736e696` | `bfdbacb0373a570883d9abe671da1391bf35487131c8894e73a13a954fa32135` |
+| `config/agent/agents/routine.md` | `1bbcb4c2ff4fd1a28fd1df26626af228177a9596994f884f3ffe8e247327b3b8` | `ae841a0af9415d68cddb7bd577caa59978cf8a3c7f2f24af3c31f61d95092771` |
+| `config/agent/agents/slow.md` | `ebddc465c0eb604d4a2d3a463a7924b93c1e89d5d5a1b1876d9f85f735759826` | `214036309fda20b3f6fc9324db075fc54a1afb1c39ceb2a44a1cc853f248bbaa` |
+| `scripts/test_agent_config.mjs` | `e1974d7c3775dd24b812e152a1419c60ed25956c436cbacc772e330e6758b952` | `74a09d673f4653f7b46087d3f8daa7a51cbaf04c01c3be6b327e512c80b444bf` |
+| `README.md` | `ee0d3b92b64e2635fab815657c38bd26384198906f33d756cccae857c6813792` | `a26befd2fa90bae729bd796fc7672fd7aa57618dcfaf27dd10eac06612829f32` |
+| `docs/capabilities.md` | `4690e5834b33ed95e0d62720aae3aa689896b2fcaed46bc281957c21f13bc045` | `3d6d6d5f0cf73bde460709758fc9bcef6e2eac78c9f33ff9795d70e6b0bd1786` |
+
+### Structural cases
+
+| Case | Result | Evidence and boundary |
+|---|---|---|
+| S01 | PASS | Allowlisted current settings and staged RPC main model/effort match Luna Medium; actual candidate B01 assistant messages also identify Luna. |
+| S02 | PASS | Configuration validator and new negative mutations pass; seven definitions/aliases remain bounded and nonspawning; passive RPC reported 13 non-MCP tools and no startup errors. This is not proof of child identity or all native schema behavior. |
+| S03 | PASS | Source review retains PERSONALITY as sole semantic trigger owner, a single bounded consultation, and no size/keyword route. Append bytes/hash unchanged. |
+| S04 | PASS | Writer definitions now pause/report affected consequential choices. Current native source confirms child policy is not inherited from main; actual writer-to-main B04 remains blocked and unobserved. |
+| S05 | PASS (source only) | Acceptance, complete native provenance, tool-use/scope review, failure/delta recovery, retention and resumption are stated in PERSONALITY. The source-only Sol receipt is accepted narrowly after provenance/tool-use inspection; ambient mutative MCP capability was exposed but not used, so no enforced read-only/least-privilege claim. No behavioral receipt is accepted without native proof. Slow `yield` and strict-schema requirements are unavailable on this runtime/configuration basis. |
+| S06 | PASS with execution discrepancy disclosed | Candidate disposable dry-run/install/doctor passed; all 294 destinations were healthy and sentinel survived. Candidate Level 1 chain passed; an earlier pre-change run's installer test failed once at `doctor --fix` and passed in the candidate run, with no installer source change. |
+| S07 | PASS | README and capability owner distinguish fail-closed instructions from runtime enforcement and link here; historical records/compatibility status are not promoted to matrix certification. |
+Candidate Level 1 chain exited 0: agent configuration, model routing, OMP
+compatibility, skill catalog, canonical locations, anti-slop handler, and
+POSIX installer/doctor integration (`python3 scripts/test_install.py`) all
+passed. An earlier pre-change chain failed once in the installer test at
+`doctor --fix` (the assertion at `scripts/test_install.py:217`); the candidate
+chain passed that same test without installer-source changes. This discrepancy
+was not reproduced or attributed to the guidance changes; it remains recorded
+as an unexplained baseline-run anomaly, not evidence of a candidate regression.
+
+
+### B01–B12 case outcomes
+
+| Case | Result | Observed basis or blocker |
+|---|---|---|
+| B01 | PASS (pre-final candidate policy snapshot) | Baseline and pre-final candidate unforced arithmetic actors used `openai-codex/gpt-6-luna`, Medium; both completed/settled with no subagent lifecycle or Sol/advisor calls. Controller assertions passed `double(7)===14`, `double(-3)===-6`, `double(0)===0`. Baseline/candidate RPC transcripts and block hashes are in the private evidence directory below. |
+| B02 | FAIL (pre-final candidate policy snapshot) | Candidate read all 24 fixture records and wrote `total:300` instead of required `sum:300`; all keyed day values were correct. Controller deep equality exited 1. The assistant's final text incorrectly claimed the required `sum` property. No task/Sol/advisor was called, so this is a consumer-visible output failure, not a volume-based escalation. First failed result is preserved; the unchanged case was not retried. |
+| B03 | BLOCKED | Frozen acceptance requires a bounded slow receipt via native child `yield`; OMP 18.10.3 filters that tool with configured `task.structured` unset/false. No case actor run. |
+| B04 | BLOCKED | Same native result-contract blocker prevents accepted slow handoff; worker-to-main case not run. |
+| B05 | BLOCKED | Forced capability acceptance requires the configured slow child and its complete native receipt; child `yield` is unavailable. |
+| B06 | BLOCKED | Depends on an accepted actual B03 receipt; no such receipt can be established through this runtime contract. |
+| B07 | BLOCKED | The planned failure/restoration sequence requires native slow child results; no artificial result or alternate failure mechanism was substituted. |
+| B08 | BLOCKED | Natural contradiction handling requires the bounded slow receipt; independent source actors were not launched. |
+| B09 | BLOCKED | Depends on the accepted B03/B06 decision basis; no actual receipt exists to reuse. |
+| B10 | BLOCKED | Native slow unresolved receipt cannot be delivered through the configured task result contract; no actor run or invented disposition. |
+| B11 | BLOCKED | No settled accepted/unresolved slow receipt from B03/B10 exists for the required compaction-continuity transition. RPC compaction is source-supported but was not exercised. |
+| B12 | BLOCKED | Required native strict-schema proof is unavailable because `task.structured` is not enabled; no change to configuration, schema acceptance, or specialist procedure was authorized. No security actor or target execution was run. |
+
+The B01 baseline receipt
+`B01-baseline.json` and candidate receipt `B01-candidate.json` show complete
+RPC v2 turn settlement and assistant model fields; measured prompt-to-settled
+times were **12.487 s** and **20.04 s**. B02 candidate receipt
+`B02-candidate.json` and first-failure controller note
+`B02-candidate-controller-failure.txt` preserve the actual behavior and
+consumer assertion. The sanitized case receipts, fixture files, prompt copies,
+source hash manifests and installer/doctor logs are under
+`~/.omp/local-reports/escalation-reliability/20261013T130218Z-133635/`.
+The controller remains temporary at `/tmp/omp_escalation_rpc_probe.py`; it was
+not archived in that retained evidence directory.
+No usage/token totals or costs were available in retained case evidence.
+Installer sources were unchanged; POSIX installer/doctor commands were exercised
+as recorded above. No PowerShell suite was executed.
+
+These actor results preceded the final tool-use acceptance sentence in
+`PERSONALITY.md` (SHA-256 above); neither actor invoked a worker, so that new
+tool-review path was not exercised. The exact B02 case was not replayed. Treat
+B01/B02 as observed pre-final candidate evidence, not behavioral proof for the
+final system-prompt hash.
+
+The required independent assessments were not dispatched because B01–B12
+candidate coverage is incomplete and multiple cases are blocked by the
+identified native result contract. Historical baseline B04/B07/B10 behavior
+was not exercised. Do not infer their status from B01, the compatibility
+checker, the source review, or this failed matrix.
+
+
 ## Authorized local OMP deployment — 2026-10-11
 
 After the explicit local-deployment request, the installer dry-run identified

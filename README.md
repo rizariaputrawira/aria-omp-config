@@ -166,8 +166,17 @@ unclear cross-system ownership, consequential architecture/compatibility/securit
 data-integrity constraints, unreliable acceptance or safety boundaries, or material
 disagreement between independent Luna findings. This is not keyword routing.
 Sol returns a decision and remaining verification needs; Luna resumes execution
-and retains acceptance and approval responsibility. Missing credentials or tools
-are environment blockers, not reasons to escalate reasoning.
+only after accepting a complete, settled receipt with trustworthy native
+`slow` / `openai-codex/gpt-6.1-sol` / Medium provenance and compatible
+evidence. Missing or unproven identity, incomplete advice, and auth/access/quota
+failures leave dependent work blocked; retry or reconsult only after a material
+evidence, packet, decision-basis, or restored-prerequisite change. Workers pause
+affected work on consequential unresolved choices and report evidence,
+alternatives, uncertainty, and pending verification to main before deciding.
+Missing credentials or tools are environment blockers, not reasons to escalate
+reasoning. These are fail-closed instructions, not runtime enforcement or a
+behavioral certification; see the
+[escalation verification record](docs/verification.md#omp-escalation-reliability-source-and-structural-review--2026-10-13).
 
 Zero workers is valid. Automatic advisor and prewalk are disabled. Maximum worker
 concurrency is three and recursion depth is one; one writer owns a shared checkout
