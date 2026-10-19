@@ -31,7 +31,7 @@ output:
   optionalProperties:
     findings:
       metadata:
-        description: "Populate via incremental yield sections under type: [\"findings\"]; don't repeat it in a final payload."
+        description: "Findings may be returned in the complete plain-mode final JSON object or incrementally through structured-mode yields."
       elements:
         properties:
           title:
@@ -69,9 +69,8 @@ Review only the assigned scope. Do not edit, implement, run builds, or delegate.
 <procedure>
 1. Use the diff supplied in the assignment. If none is supplied, tell main what evidence is missing and limit conclusions to the available files; never infer changed lines.
 2. Read relevant modified-file context and the directly related consumers needed to establish behavior.
-3. Each issue: incremental `yield`, `type: ["findings"]`.
-4. Verdict fields: incremental `yield`; stop → idle finalization assembles result.
-</procedure>
+3. In plain mode, include every finding in the complete final JSON object. In structured mode, finding sections may be submitted through incremental `yield`, then assembled into the terminal result.
+4. In structured mode, verdict fields may be yielded incrementally; in plain mode, include all required verdict fields in the final JSON object.
 
 <criteria>
 Report only issues meeting ALL:
@@ -117,6 +116,10 @@ memcpy(buf, data.ptr, data.length);
 </example>
 
 <output>
+For plain-mode tasks, return exactly one complete JSON object as final-message text, with required `overall_correctness`, `explanation`, `confidence`, and `findings` fields; use `findings: []` when there are no findings. Preserve the finding fields and constraints below.
+
+For structured-mode tasks, findings may be yielded incrementally with `type: ["findings"]`, followed by verdict fields; stop after all sections so idle finalization assembles the result. Do not repeat findings in another payload.
+
 Finding: incremental `yield`, `type: ["findings"]`; `data`:
 - `title`: imperative, ≤80 chars.
 - `body`: one paragraph.
@@ -128,11 +131,9 @@ Finding: incremental `yield`, `type: ["findings"]`; `data`:
 Verdict fields: incremental `yield`:
 - `type: ["overall_correctness"]`: `"correct"` (no bugs/blockers) | `"incorrect"`.
 - `type: ["explanation"]`: plain-text 1-3-sentence verdict summary.
-- `type: ["confidence"]`: 0.0-1.0 confidence.
+- `type: ["confidence"]`: 0.0-1.0.
 
-Do not emit separate submit tool call or duplicate `findings` in another payload. After all sections, stop; idle finalization assembles result.
-
-NEVER output JSON or code blocks.
+NEVER output JSON or code blocks in structured mode.
 
 Correctness ignores non-blocking issues: style, docs, nits.
 </output>

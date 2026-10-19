@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # OMP installation health
 
-Run only when the operator explicitly invokes this skill. In interactive OMP, use `/skill:workflow-omp-health [quick|upgrade|full]`. This is an installed-state health procedure, not an upstream adoption review, installer, or rollback tool. Keep Luna as the normal owner; do not invoke Sol unless the observed evidence independently meets the shared `PERSONALITY.md` decision-consultation policy.
+Run only when the operator explicitly invokes this skill. In interactive OMP, use `/skill:workflow-omp-health [quick|upgrade|full]`. This is an installed-state health procedure, not an upstream adoption review, installer, or rollback tool. Sol is the configured director; do not trigger consultation or tests except under the shared `PERSONALITY.md` policy and evidence gates.
 
 ## Modes
 
@@ -49,14 +49,21 @@ Locate the effective agent directory with `omp config path`; do not assume a pro
 3. If an independently installed candidate is available, use its own OMP
    binary, isolated agent directory, and disposable workspace. Do not copy
    credentials or alter the known-good environment merely to test it.
-4. Exercise runtime cases only when their dependent source/prompt contract
-   changed, prior valid evidence is inapplicable, behavior is suspected, and
-   required provider access is already available: clear Luna-only work;
-   consequential unresolved Luna→one slow/Sol consultation→Luna; settled
-   large work remaining Luna-owned; and Plan Mode Luna/read-only behavior.
-   Observe actual parent/child model identities and dispatch events, not prompt
-   wording alone. Report provider/authenticated behavior separately.
-5. Use `full` for explicit requests, relevant changed-contract tests, or
+4. Select runtime checks by changed or unproven contracts, not version change
+   alone. Preserve accepted evidence at its original runtime/version/scope;
+   a current compatibility assessment may reuse applicable scoped claims but
+   must not relabel historical results as tests of this candidate. Sol-director
+   core feasibility is not replayed solely because the OMP version changed.
+   The current required gates are defined by the compatibility record and its
+   reference; optional `slow` is bounded read-only decision support, not a
+   worker handoff. Record Plan activation separately from verified proposal
+   transition/support.
+5. Exercise additional runtime cases when their dependent source/prompt
+   contract changed, prior same-version evidence is inapplicable, behavior is
+   suspected, and provider access is already available. Observe actual
+   parent/child identities and dispatch events, not prompt wording alone.
+   Report provider/authenticated behavior separately.
+6. Use `full` for explicit requests, relevant changed-contract tests, or
    unresolved upgrade evidence. Never promote based only on an unchanged
    version string, config parse, or source diff. A candidate check is not
    post-promotion health.
@@ -99,4 +106,4 @@ Verdict precedence is fail-closed:
 
 Map the compatibility checker's `INCOMPATIBLE` result to overall `INCOMPATIBLE`; map `NOT VERIFIED` and `REVIEW REQUIRED` to overall `NOT VERIFIED`. A passing doctor or launchable OMP binary does not override a required checker result.
 
-Report version, compatibility result, main/plan/slow/advisor and fallback configuration, Luna direct and Luna→slow→Luna results when exercised, doctor outcome, critical source drift, unverified checks, and one next action. Do not report HEALTHY merely because OMP starts or configuration values parse. Do not change compatibility records, config, models, or installations as a side effect of checking.
+Report version, compatibility result, main/plan/slow/advisor and fallback configuration, Sol-main/Luna-worker observations when exercised, optional `slow` decision evidence when invoked, doctor outcome, critical source drift, unverified checks, and one next action. Do not report HEALTHY merely because OMP starts or configuration values parse. Do not change compatibility records, config, models, or installations as a side effect of checking.

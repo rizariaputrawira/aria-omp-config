@@ -6,16 +6,17 @@ theme:
   light: onyx
 setupVersion: 2
 modelRoles:
-  default: openai-codex/gpt-6-luna:medium
+  default: openai-codex/gpt-6.1-sol:medium
+  tiny: openai-codex/gpt-6-luna:low
   smol: openai-codex/gpt-6-luna:medium
   routine: openai-codex/gpt-6-luna:medium
-  plan: openai-codex/gpt-6-luna:medium
+  plan: openai-codex/gpt-6.1-sol:medium
   task: openai-codex/gpt-6-luna:medium
   advisor: openai-codex/gpt-6.1-sol:high
+  executor: openai-codex/gpt-6.1-sol:medium
   slow: openai-codex/gpt-6.1-sol:medium
   vision: openai-codex/gpt-6-luna:medium
   commit: openai-codex/gpt-6-luna:low
-  tiny: openai-codex/gpt-6-luna:low
   memory: openai-codex/gpt-6-luna:low
 cycleOrder:
   - smol
@@ -63,6 +64,7 @@ task:
     reviewer: "@task"
     security-reviewer: "@task"
     slow: "@slow"
+    sol-executor: "@executor"
     advisor: "@advisor"
   agentPrewalk:
     scout: "off"
@@ -72,6 +74,7 @@ task:
     security-reviewer: "off"
     slow: "off"
     advisor: "off"
+    sol-executor: "off"
   agentAdvisor:
     scout: "off"
     routine: "off"
@@ -80,6 +83,7 @@ task:
     security-reviewer: "off"
     slow: "off"
     advisor: "off"
+    sol-executor: "off"
   agentServiceTierOverrides:
     scout: none
     routine: none
@@ -88,6 +92,7 @@ task:
     security-reviewer: none
     slow: none
     advisor: none
+    sol-executor: none
   isolation:
     enabled: false
 advisor:

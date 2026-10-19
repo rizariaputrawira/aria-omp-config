@@ -40,8 +40,8 @@ external binaries and services are not. Installation starts no external services
 
 ## Capabilities
 
-- **Consistent model ownership:** Luna-medium normally owns the task end to end;
-  Sol handles an identified consequential decision, not simply a larger task.
+- **Consistent model ownership:** Sol-medium directs the task end to end;
+  Luna-medium performs ordinary implementation and bounded worker roles.
 - **Selective help:** bounded discovery, implementation, and review workers can
   help when useful. Delegation is optional; main integrates and verifies results.
 - **On-demand procedures:** skills cover debugging, UI work, code and security
@@ -119,10 +119,12 @@ external service is required for ordinary work. For example:
 
 Use the [task-to-skill guide](SKILL-USAGE.md) for procedure names and examples.
 After installing or updating this configuration, invoke
-`/skill:workflow-omp-health quick` inside OMP. After an OMP binary version change,
-use `/skill:workflow-omp-health upgrade`; reserve `full` for explicit deeper
-checks or unresolved evidence. Health reports unknown runtime evidence rather
-than treating startup as success.
+`/skill:workflow-omp-health quick` inside OMP. After an OMP binary version
+change, use `/skill:workflow-omp-health upgrade` for source-impact review and
+the genuinely affected focused checks; a version change alone does not require
+replaying accepted core feasibility. Reserve `full` for explicit deeper checks
+or unresolved evidence. Health reports unknown runtime evidence rather than
+treating startup as success.
 
 ## How it works
 
@@ -145,43 +147,54 @@ capabilities only when their prerequisites and native permissions allow it.
 
 ### Models and bounded delegation
 
-[Current settings](config/agent/config.yml) request
-`openai-codex/gpt-6-luna:medium` for fresh unforced main sessions and native
-Plan Mode. Luna owns intent, scope, planning, worker selection, implementation,
-integration, verification, and the final answer. Task size may justify
-decomposition, but **size alone does not require a stronger model**.
+[Current settings](config/agent/config.yml) request `openai-codex/gpt-6.1-sol:medium`
+for fresh unforced main and Plan sessions. Sol directs within current authority;
+Luna-medium performs ordinary implementation and source-review work. A distinct
+`sol-executor` handles explicitly assigned implementation; neither role mapping
+automatically activates an integration or grants broader permissions.
 
 | Role | Use when useful | Configured model |
 |---|---|---|
-| `scout` | Bounded read-only discovery | Luna-medium |
-| `routine` / `task` | Clear small / normal bounded implementation | Luna-medium |
-| `reviewer` / `security-reviewer` | Source-grounded review under the role's contract | Luna-medium |
-| `slow` | One required consequential decision consultation | `openai-codex/gpt-6.1-sol:medium` |
-| `advisor` | Exceptional evidence-only advice, not independent investigation | `openai-codex/gpt-6.1-sol:high` |
+| `scout`, `routine`, `task`, `reviewer`, `security-reviewer` | Bounded discovery, implementation and source review | Luna-medium |
+| `sol-executor` | Explicitly assigned consequential implementation | Sol-medium |
+| `slow` | Optional bounded Sol-medium decision support for one identified consequential uncertainty | Sol-medium |
+| `advisor` | Exceptional evidence-only advice, not independent investigation | Sol-high; disabled by default |
 
-[PERSONALITY](config/agent/PERSONALITY.md#working-policy) requires a bounded
-`slow` consultation for Luna-led execution with an identified consequential issue: conflicting evidence
-or requirements, root causes still indistinguishable after discriminating checks,
-unclear cross-system ownership, consequential architecture/compatibility/security/
-data-integrity constraints, unreliable acceptance or safety boundaries, or material
-disagreement between independent Luna findings. This is not keyword routing.
-Sol returns a decision and remaining verification needs; Luna resumes execution
-only after accepting a complete, settled receipt with trustworthy native
-`slow` / `openai-codex/gpt-6.1-sol` / Medium provenance and compatible
-evidence. Missing or unproven identity, incomplete advice, and auth/access/quota
-failures leave dependent work blocked; retry or reconsult only after a material
-evidence, packet, decision-basis, or restored-prerequisite change. Workers pause
-affected work on consequential unresolved choices and report evidence,
-alternatives, uncertainty, and pending verification to main before deciding.
-Missing credentials or tools are environment blockers, not reasons to escalate
-reasoning. These are fail-closed instructions, not runtime enforcement or a
-behavioral certification; see the
+The current 18.12.1 candidate's Plan TUI activation was observed, but its full
+proposal transition is not verified; native Plan warns that the extension-
+provided write tool cannot submit plans. This is not evidence of full proposal
+support or a reason to suppress the warning. See the
+[current candidate record](docs/verification.md#sol-director-candidate-local-assessment--2026-10-18).
+
+[PERSONALITY](config/agent/PERSONALITY.md#working-policy) retains Sol-medium
+`slow` as an optional decision service when Sol judges an independent receipt
+useful for a consequential issue surfaced by worker evidence. Sol may decide
+within supplied evidence and current authority without a mandatory consultation
+or manual model switch. Independent security review, implementation
+verification, independent acceptance, native approval and user-owned gates
+remain separate and in force. When Sol dispatches `slow`, it integrates the
+complete bounded receipt with actual native role/model provenance; missing
+identity, incomplete advice and auth/access/quota failures leave dependent work
+blocked. Recovery is bounded to two materially distinct attempts; see the
+[canonical recovery and acceptance procedure](config/agent/PERSONALITY.md#capability-ownership-and-blockers).
+Implementation verification and independent acceptance are separate required
+gates where applicable. If independent acceptance fails, protected work stops;
+the user controls any disposition, and the managed Sol director needs no model
+switch to report that stop. Sol consultation does not substitute for acceptance.
+Workers pause affected work on consequential unresolved choices and report
+evidence, alternatives, uncertainty, and pending verification to main before
+dependent decisions. Missing credentials or tools are environment blockers, not
+reasons to escalate reasoning. These are fail-closed instructions, not runtime
+enforcement or a behavioral certification; see the
 [escalation verification record](docs/verification.md#omp-escalation-reliability-source-and-structural-review--2026-10-13).
 
-Zero workers is valid. Automatic advisor and prewalk are disabled. Maximum worker
-concurrency is three and recursion depth is one; one writer owns a shared checkout
-unless isolation is established. Task isolation is disabled. The resolved-model
-badge shows a model ID, not cost, quality, authorization, or isolation evidence.
+Zero implementation/decomposition workers is valid for answer-only work and
+coordination within the director's scoped tools; it does not waive requested
+implementation or required independent acceptance. Automatic advisor and
+prewalk are disabled. Maximum worker concurrency is three and recursion depth
+is one; one writer owns a shared checkout unless isolation is established. Task
+isolation is disabled. The resolved-model badge shows a model ID, not cost,
+quality, authorization, or isolation evidence.
 Delegation may increase total tokens; savings are not assumed.
 
 Explicit user-selected models remain user choices; the main is not automatically
@@ -295,8 +308,7 @@ Both Eval backends remain disabled globally. Deliberate session-only
 `tools.approval.eval: prompt`; keywords never enable it themselves. Eval grants
 host execution, not a sandbox or Bash-pattern confinement. Classification and
 reused pool workers do not replace fresh named specialist security review.
-Required bounded `slow`, native approval and one-writer ownership still apply,
-and keywords authorize no unrequested commit, push or external effect.
+Optional bounded `slow` when Sol judges it useful, native approval and one-writer ownership still apply, and keywords authorize no unrequested commit, push or external effect.
 
 See the [native ownership/activation matrix](docs/capabilities.md#native-ownership-and-activation--omp-1889)
 for pinned sources and retained specializations, and the
@@ -323,10 +335,10 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 Use `--thinking high` when consequential decisions, complex integration or
 difficult reasoning justify it. Medium is a starting recommendation for
 well-defined execution and routine coordination, not a forced routing rule.
-Luna-medium remains the normal main; explicit selections are not silently changed.
-A Sol director can decide a consequential question directly when evidence and
-authority suffice, without a redundant `slow` call; independent security review
-and native approval remain separate.
+The managed config assigns Luna-medium to delegated workers and Sol-medium to
+main and Plan. Sol may decide a consequential question directly when evidence
+and authority suffice, without a mandatory `slow` consultation; independent
+security review, acceptance and native approval remain separate.
 
 | Native tier | Responsibility | Current model resolution |
 |---|---|---|
@@ -346,11 +358,7 @@ for complete assignments or coherent acceptance/interface milestones with allowe
 writes, prerequisites and an authorized checker. A settled worker turn or director
 file read is not behavioral acceptance; inspect actual executor output.
 
-**Native limits, reviewed for 18.8.9:** the director has read/coordination tools,
-not shell execution or named specialist dispatch. Assign bounded runtime checks
-to a permitted worker and inspect actual output; reading files is not runtime
-proof. Required `slow` or independent reviewer/security-reviewer operations use
-the supported Ordinary workflow, preserving effective-definition provenance.
+**Native limits for 18.12.1:** Sol main has scoped coordination/read paths and named task dispatch, not general workspace reads/writes or shell. It delegates source inspection and bounded runtime checks to permitted workers, then inspects actual output; reading source files is not runtime proof. Sol may choose `slow` for a useful, bounded consequential uncertainty; required independent security-reviewer operations use the supported Ordinary workflow. Security assurance uses the approved Option B source, identity, snapshot, strict-result and operation evidence, not a claim that the executed reviewer is cryptographically bound to the exact selected definition file.
 One writer owns a shared checkout unless isolation is established. Finish and
 record needed work before toggling `/vibe` off: exit cancels remaining workers.
 Active or paused Plan/Goal modes cannot coexist with Vibe; session reset/fork/
@@ -391,20 +399,20 @@ user plugin state are not managed.
 | [config.yml](config/agent/config.yml) | Models/roles, task overrides, discovery, approval, Plan Mode, and telemetry settings |
 | [PERSONALITY.md](config/agent/PERSONALITY.md) | Global work, escalation, delegation, and evidence-acceptance policy |
 | [AGENTS.md](config/agent/AGENTS.md) | Conditional procedure routing and permission/model distinctions |
-| [APPEND_SYSTEM.md](config/agent/APPEND_SYSTEM.md) | Narrow bounded-consultation clarification appended to the native prompt |
-| [agents/](config/agent/agents/) | Seven bounded roles and output contracts |
+| [APPEND_SYSTEM.md](config/agent/APPEND_SYSTEM.md) | Sol-director and optional bounded-decision clarification appended to the native prompt |
+| [agents/](config/agent/agents/) | Eight bounded roles and output contracts |
 | [skills/](config/agent/skills/) | On-demand procedures in native flat `<folder>/SKILL.md` layout |
 | [extensions/](config/agent/extensions/) | Model-dependent tool boundary, telemetry opt-outs, RTK/Herdr hooks, and Anti Slop guidance |
 | [commands/](config/agent/commands/) | Explicit OpenDesign start/close recipes |
 | [mcp.json](config/agent/mcp.json) | Machine-provided MCP credentials/executable references |
 | [scripts/](scripts/), `install.*` | Deployment, inventory, static contracts, and executable hook checks |
 
-OMP owns the full system prompt. The verified `known-patched` path in the
-[compatibility record](config/agent/omp-compatibility.yml) appends the narrow
+OMP owns the full system prompt. The compatibility record tracks the narrow
 `APPEND_SYSTEM.md` clarification without replacing native content;
-PERSONALITY remains the owner of required `slow` conditions. The compatibility
-checker fingerprints this append and requires no active `SYSTEM.md` or
-`SYSTEM_TEMPLATE.md` override. Prompt changes apply to fresh sessions.
+PERSONALITY remains the owner of Sol's optional `slow` decision conditions. The compatibility
+checker fingerprints the complete escalation-relevant payload and requires no
+active `SYSTEM.md` or `SYSTEM_TEMPLATE.md` override. Prompt changes apply to
+fresh sessions.
 Existing-home cutover precautions are in [migration](#existing-home-migration).
 
 ## Requirements and prerequisites
@@ -504,8 +512,10 @@ working-tree/child tool restrictions are runtime restrictions, not OS isolation.
 Plan Mode children share the parent's session-local root and exclude LSP/MCP/
 injected tools. Outside those native restrictions, role frontmatter does not
 universally exclude ambient custom, extension, or MCP tools.
-The [tool-boundary hook](config/agent/extensions/luna-tool-boundary.js) gates exact
-live model/provider identities; it is not a reviewer sandbox or a model router.
+The managed role-boundary extension validates native role/model identity and
+registered direct-child relationships, and same-tool guards main read/write
+arguments before native execution. The read-only security-reviewer is constrained
+by named-tool admission and hook policy; neither mechanism is an OS sandbox.
 Task isolation remains disabled. Keep native approval, admission, Plan Mode,
 extension interception, and instructional prohibitions distinct; see
 [permission ownership](config/agent/AGENTS.md#permission-and-model-ownership).
@@ -635,7 +645,7 @@ application-wide isolation.
 
 The [migration map](docs/migration.md) distinguishes hidden compatibility pointers
 from stale unmanaged folders. The current catalog has 37 canonical capabilities
-(34 visible, 3 explicit-only), 14 hidden aliases, 269 skill assets, and 294 mappings.
+(34 visible, 3 explicit-only), 14 hidden aliases, 269 skill assets, and 295 mappings.
 [Decisions and inventory](docs/capabilities.md) account for 35 current-main input
 capabilities plus local `workflow-omp-health` and `ui-browser`.
 The migration record does not claim a completed live-home migration.
@@ -665,24 +675,30 @@ and an active `SYSTEM.md`/`SYSTEM_TEMPLATE.md` blocks the known verified path.
 
 ## Verification and known limits
 
-The [compatibility record](config/agent/omp-compatibility.yml) now records
-reviewed and verified OMP **18.8.9** in `known-patched` append mode for the
-current managed Candidate C configuration. The
-[latest scoped receipt](docs/verification.md#final-plan-enforcement-judge-provenance-and-compatibility-verification--2026-10-11)
-records fixture safety and an approved synthetic judge batch whose completed
-item and final status report Luna as the declared result model—not hidden
-service-side routing.
+The [compatibility record](config/agent/omp-compatibility.yml) assesses the
+current candidate against OMP **18.12.1** source. The accepted **18.11.0 core
+pilot** is reused at its original scope; the 18.8.9 receipt remains historical.
+Neither is relabeled as a complete current production acceptance.
+The [current scoped receipt](docs/verification.md#sol-director-production-candidate-continuation--2026-10-19)
+records the strict Option B phases, accessible reviewer approval check and
+completed independent integration acceptance. The candidate is
+**READY FOR INSTALLATION within that scoped, Plan-excluded boundary**;
+installation still requires separate user authorization. The conditional
+path-check/read concurrency concern remains needs-validation, not a
+demonstrated bypass or a fixed issue. Inaccessible Plan testing is explicitly
+deferred by the user, not passed or a claim of full native Plan proposal support.
 
-The native Plan lifecycle passed: parent preapproval write denial, read-only
-child admission, native approval, and approved parent write/readback. The first
-observer's BLOCKED result was a harness false negative: omitted child `yield`
-and assumed a trailing newline; the actual write was exactly five bytes
-`AFTER`. The independent native-receipt validator passed all 16 criteria.
-Existing direct Luna and Luna → slow/Sol → Luna evidence remains scoped and
-historical; it is not a minimum-version or future-compatibility guarantee.
+Native plain tasks can return complete settled final-message text. Strict
+structured review requires `task.structured: true` plus an explicitly selected
+supported native `schemaMode: "strict"` (or SDK session
+`outputSchemaMode: "strict"`), using the selected agent's existing schema.
+Structured mode alone, a role file or JSON-shaped output is not strict
+runtime evidence. Ordinary managed sessions keep structured mode disabled;
+the separate disposable review host must establish its actual effective
+instructions, identity, tools, schema and validated result.
 [The upgrade gate](config/agent/skills/docs-engineering/references/omp-compatibility.md)
 and [verification records](docs/verification.md) distinguish static, handler,
-native-runtime, and authenticated evidence.
+native-runtime and authenticated evidence, preserving historical limits.
 Run `python3 scripts/test_install.py` for the production POSIX integration
 checks. `pwsh -NoProfile -File scripts/test_telemetry_install.ps1` covers the
 PowerShell telemetry install path, including UTF-16 profile preservation; it

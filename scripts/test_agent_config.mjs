@@ -5,7 +5,7 @@ const configPath = "config/agent/config.yml";
 const agentDir = "config/agent/agents";
 const roles = {
   scout: "smol", routine: "routine", task: "task", reviewer: "task",
-  "security-reviewer": "task", slow: "slow", advisor: "advisor",
+  "security-reviewer": "task", slow: "slow", "sol-executor": "executor", advisor: "advisor",
 };
 function parseYaml(text, path) {
   try {
@@ -19,11 +19,13 @@ function frontmatter(text, path) {
   assert.ok(match, `${path}: missing/malformed frontmatter`);
   return parseYaml(match[1], path);
 }
-function validate(config, definitions) {
+function validate(config, definitions, mutateFrontmatter = () => {}) {
   for (const role of ["default", "plan"]) {
-    assert.equal(config.modelRoles?.[role], "openai-codex/gpt-6-luna:medium", `${configPath}: ${role} selector`);
+    assert.equal(config.modelRoles?.[role], "openai-codex/gpt-6.1-sol:medium", `${configPath}: ${role} selector`);
   }
+  assert.equal(config.modelRoles?.tiny, "openai-codex/gpt-6-luna:low", `${configPath}: preserve tiny selector`);
   assert.equal(config.defaultThinkingLevel, "medium", `${configPath}: default thinking level`);
+  assert.ok(config.task?.structured === undefined || config.task.structured === false, `${configPath}: task.structured remains opt-in`);
   assert.equal(config.task?.eager, "default", `${configPath}: no proactive execution delegation`);
   assert.equal(config.task?.maxConcurrency, 3, `${configPath}: max concurrency`);
   assert.equal(config.task?.enableEffort, false, `${configPath}: per-task effort disabled`);
@@ -89,6 +91,7 @@ function validate(config, definitions) {
   const names = new Set();
   for (const [path, text] of definitions) {
     const data = frontmatter(text, path);
+    mutateFrontmatter(path, data);
     assert.ok(Object.hasOwn(roles, data.name), `${path}: unmapped agent ${data.name}`);
     assert.ok(!names.has(data.name), `${path}: duplicate agent ${data.name}`);
     names.add(data.name);
@@ -97,11 +100,22 @@ function validate(config, definitions) {
     const expectedEffort = data.name === "advisor" ? "high" : "medium";
     assert.equal(data.thinkingLevel ?? config.defaultThinkingLevel, expectedEffort, `${path}: thinking level`);
     assert.equal(config.task?.agentModelOverrides?.[data.name], alias, `${configPath}: ${data.name} override`);
-    const model = ["slow", "advisor"].includes(data.name) ? "gpt-6.1-sol" : "gpt-6-luna";
+    const model = ["slow", "advisor", "sol-executor"].includes(data.name) ? "gpt-6.1-sol" : "gpt-6-luna";
     assert.equal(config.modelRoles?.[roles[data.name]], `openai-codex/${model}:${expectedEffort}`, `${configPath}: ${roles[data.name]} selector`);
     assert.deepEqual(data.spawns, [], `${path}: nested spawning disabled`);
+    if (data.name === "security-reviewer") {
+      const allowedTools = new Set(["read", "grep", "glob", "lsp", "yield"]);
+      const requiredTools = ["read", "grep", "glob", "lsp", "yield"];
+      assert.ok(Array.isArray(data.tools), `${path}: security-reviewer tools must be a list`);
+      assert.ok(requiredTools.every(tool => data.tools.includes(tool)), `${path}: scoped discovery fallback admission`);
+      assert.ok(data.tools.every(tool => allowedTools.has(tool)), `${path}: security-reviewer read-only admission`);
+    }
     if (data.name === "slow") {
-      assert.deepEqual(data.tools, ["read", "find", "grep", "glob", "web_search", "yield"], `${path}: slow read-only admission`);
+      const allowedTools = new Set(["read", "find", "grep", "glob", "web_search", "yield"]);
+      const requiredTools = ["read", "grep", "glob", "web_search"];
+      assert.ok(Array.isArray(data.tools), `${path}: slow tools must be a list`);
+      assert.ok(requiredTools.every(tool => data.tools.includes(tool)), `${path}: slow required read-only admission`);
+      assert.ok(data.tools.every(tool => allowedTools.has(tool)), `${path}: slow read-only admission`);
     }
   }
   for (const name of Object.keys(roles)) assert.ok(names.has(name), `${agentDir}/${name}.md: missing definition`);
@@ -110,12 +124,16 @@ function validate(config, definitions) {
 const config = parseYaml(readFileSync(configPath, "utf8"), configPath);
 const definitions = readdirSync(agentDir).filter((name) => name.endsWith(".md"))
   .map((name) => [`${agentDir}/${name}`, readFileSync(`${agentDir}/${name}`, "utf8")]);
+assert.equal(config.task.structured, undefined, "managed default leaves task.structured unset");
 validate(config, definitions);
-function rejects(name, mutate, expected) {
+const unstructured = structuredClone(config);
+unstructured.task.structured = false;
+validate(unstructured, definitions);
+function rejects(name, mutate, expected, mutateFrontmatter) {
   const cfg = structuredClone(config);
   const defs = definitions.map(([path, text]) => [path, text]);
   mutate(cfg, defs);
-  assert.throws(() => validate(cfg, defs), expected, name);
+  assert.throws(() => validate(cfg, defs, mutateFrontmatter), expected, name);
 }
 rejects("missing definition", (_, defs) => defs.splice(defs.findIndex(([path]) => path.endsWith("/slow.md")), 1), /slow\.md: missing/);
 rejects("malformed frontmatter", (_, defs) => { defs[0][1] = "---\nname: [\n---\n"; }, /config\/agent\/agents\//);
@@ -131,23 +149,24 @@ rejects("duplicate definition", (_, defs) => defs.push(defs[0]), /duplicate agen
 rejects("unmapped definition", (_, defs) => defs.push([`${agentDir}/unknown.md`, "---\nname: unknown\n---\n"]), /unknown\.md: unmapped/);
 for (const name of ["slow", "advisor"]) {
   rejects(`${name} alias`, (cfg) => { cfg.task.agentModelOverrides[name] = "@task"; }, new RegExp(`${name} override`));
-  rejects(`${name} effort`, (_, defs) => {
-    const row = defs.find(([path]) => path.endsWith(`/${name}.md`));
-    row[1] = row[1].replace(/thinkingLevel: \w+/, `thinkingLevel: ${name === "advisor" ? "medium" : "high"}`);
-  }, /thinking level/);
+  rejects(`${name} effort`, () => {}, /thinking level/, (path, data) => {
+    if (path.endsWith(`/${name}.md`)) data.thinkingLevel = name === "advisor" ? "medium" : "high";
+  });
   rejects(`${name} concrete selector`, (cfg) => { cfg.modelRoles[name] = "openai-codex/gpt-6-luna:medium"; }, new RegExp(`${name} selector`));
 }
-rejects("slow writable tool admitted", (_, defs) => {
-  const row = defs.find(([path]) => path.endsWith("/slow.md"));
-  row[1] = row[1].replace("tools: [read, find, grep, glob, web_search, yield]", "tools: [read, write, find, grep, glob, web_search, yield]");
-}, /slow read-only admission/);
-rejects("slow spawning enabled", (_, defs) => {
-  const row = defs.find(([path]) => path.endsWith("/slow.md"));
-  row[1] = row[1].replace("spawns: []", "spawns: [task]");
-}, /nested spawning disabled/);
-rejects("Sol default", (cfg) => { cfg.modelRoles.default = "openai-codex/gpt-6.1-sol:medium"; }, /default selector/);
+rejects("slow writable tool admitted", () => {}, /slow read-only admission/, (path, data) => {
+  if (path.endsWith("/slow.md")) data.tools.push("write");
+});
+rejects("security-reviewer broad read tool admitted", () => {}, /security-reviewer read-only admission/, (path, data) => {
+  if (path.endsWith("/security-reviewer.md")) data.tools.push("find");
+});
+rejects("slow spawning enabled", () => {}, /nested spawning disabled/, (path, data) => {
+  if (path.endsWith("/slow.md")) data.spawns = ["task"];
+});
+rejects("structured task mode is not managed default", (cfg) => { cfg.task.structured = true; }, /task\.structured/);
+rejects("Luna default", (cfg) => { cfg.modelRoles.default = "openai-codex/gpt-6-luna:medium"; }, /default selector/);
 rejects("high default", (cfg) => { cfg.modelRoles.default = "openai-codex/gpt-6.1-sol:high"; }, /default selector/);
-rejects("Sol plan", (cfg) => { cfg.modelRoles.plan = "openai-codex/gpt-6.1-sol:medium"; }, /plan selector/);
+rejects("Luna plan", (cfg) => { cfg.modelRoles.plan = "openai-codex/gpt-6-luna:medium"; }, /plan selector/);
 rejects("retry disabled", (cfg) => { cfg.retry.enabled = false; }, /retry enabled/);
 rejects("retry count", (cfg) => { cfg.retry.maxRetries = 2; }, /retry count/);
 rejects("model fallback enabled", (cfg) => { cfg.retry.modelFallback = true; }, /model fallback/);
@@ -188,4 +207,4 @@ rejects("recursive removal unprotected", (cfg) => {
 rejects("prompt masks removal deny", (cfg) => {
   cfg.bash.patterns.sort((a, b) => (a.approval === "prompt" ? -1 : 1) - (b.approval === "prompt" ? -1 : 1));
 }, /protected removal/);
-console.log("Agent configuration contract: Luna-medium main/plan, bounded concurrency/depth, seven worker definitions/overrides/selectors, slow read-only admission, retry/fallback and advisor/prewalk/service-tier settings, and native approval agree. Static configuration is not dispatch or installed approval runtime proof.");
+console.log("Agent configuration contract: Sol-medium main/plan; Luna-medium default workers plus Sol-medium slow and executor; bounded concurrency/depth, managed roles/overrides/selectors, read-only slow admission, retry/fallback and advisor/prewalk/service-tier settings, and native approval agree. Static configuration is not dispatch or installed approval runtime proof.");

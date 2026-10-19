@@ -80,17 +80,22 @@ The compatibility record classifies the bounded set into two groups:
 
 **Hard critical**: `main.ts`, `system-prompt.ts`, prompt capability/config
 discovery, model role resolver/settings, task settings/dispatch/executor/spawn
-policy, Plan Mode settings/handoff, and native system/project prompt templates.
-A changed file returns `REVIEW REQUIRED` until its contract is reviewed or
-exercised.
+policy and result contract, task index, native SDK/subagent RPC/provenance,
+output-schema validation/yield, Plan Mode settings/handoff, and native
+system/project prompt templates. A changed file returns `REVIEW REQUIRED`
+until its contract is reviewed or exercised; missing/unfetchable files are
+`NOT VERIFIED`.
 
 **Watched**: extension type/runner, settings registry/config wrapper,
 approval/bash, and skill capability/discovery. A changed file asks for focused
 surface-specific checks; it does not assert that the routing architecture
-changed. Unchanged hard-critical bytes allow an existing runtime receipt tied
-to the exact reviewed baseline to carry forward without another model call.
-The checker reports watched drift separately and does not silently clear the
-focused-check requirement.
+changed.
+
+Unchanged bytes narrow required source review but do not prove behavior by
+themselves. A current candidate compatibility assessment may reuse scoped
+claims only when they remain applicable and retain the source receipt's
+original version, result mode, scope and limits; it cannot relabel old evidence
+as a new-version test.
 
 `--candidate latest` resolves the official stable release. Optional
 `--inspect-main` compares the same tracked files at the moving main tip for
@@ -99,24 +104,46 @@ early warning only. Neither path installs, promotes, or updates OMP.
 ### Deterministic health and runtime evidence
 
 The checker validates installed effective model roles, task bounds, advisor,
-retry/fallback and prewalk settings; managed compatibility-record consistency;
-prompt discovery/hash; and source comparison when the installed/candidate
-version differs from the reviewed source. It is read-only and makes no model
-call. The explicit `workflow-omp-health` skill retains doctor and skill-list
-checks, and `full` runs the focused deterministic repository suite.
+retry/fallback, prewalk and `task.structured` settings; managed compatibility
+record consistency; complete escalation-payload fingerprint; prompt
+discovery/hash; and source comparison when needed. It is read-only and makes no
+model call. The detached checker reports configured `task.structured`; explicit
+invocation overlays and schema mode require their own session evidence.
+Ordinary managed sessions leave structured mode unset or false. Plain tasks
+accept complete final-message text with independent native provenance. Strict
+structured results require both `task.structured: true` and explicit native
+`schemaMode: "strict"` (or SDK session `outputSchemaMode: "strict"`); the
+structured flag alone is not strict-mode proof. Acceptance needs actual native
+`structuredOutput` source agent, strict mode and valid status, plus effective
+instructions, identity, tools/schema and operations. Do not invent a strict
+field on the outer `functions.task` interface or accept caller schema override.
 
-Runtime evidence remains separate: use the record's `last_verified` evidence
-for Luna-direct, Luna→one slow/Sol bounded decision→Luna, and Plan Mode,
-retaining each receipt's actual version, scope and limits. Reuse a receipt only
-when its prompt mode and relevant hard-critical contracts remain applicable.
-Changed prompt construction requires prompt-discovery and applicable Luna
-routing probes; task dispatch changes require the bounded slow dispatch probe;
-Plan Mode changes require its own probe. Provider/authentication evidence is
-not inferred from static config or source hashes. Do not replay unchanged cases
-just because omp-docflow documentation or unrelated files changed.
+Runtime evidence remains separate and each claim retains its original runtime,
+version, scope and limits. A current candidate compatibility assessment may
+reuse applicable scoped evidence, but must name the source claim and its original
+scope; this does not turn historical 18.11 or 18.8 results into new 18.12 tests.
+The checker requires current gates for director/Luna/Sol core evidence,
+targeted messaging and URI cases, fresh initialization/final-input/
+registration/model-role transition, approval and reviewer authority, Option B
+security review and independent acceptance. Every required gate must be `PASS`;
+the sole exception is a user-authorized inaccessible Plan deferral recorded as
+`DEFERRED_UNAVAILABLE` with the exact current `plan_defer_evidence` pointer. This
+excludes Plan from acceptance and never means Plan passed or is supported.
+OPTIONAL `slow` is bounded read-only decision support, not a worker handoff.
+Plan activation is not proof of a complete proposal transition; record the
+native write-shadow limitation and do not claim full Plan proposal support
+without evidence.
 
-The currently reviewed source and runtime receipt remain recorded separately in
-`omp-compatibility.yml`. The checker does not rewrite or bless either record.
+The current source assessment and pending gates remain distinct from
+`last_verified` history. The checker requires the CURRENT assessment itself to
+record candidate version/revision, date, effective prompt mode, explicit
+`VERIFIED` status, evidence and complete payload fingerprint. All non-Plan
+gates must pass. Only the exact documented user-deferred Plan boundary may be
+excluded, and checker output must say it remains untested.
+A legacy Luna receipt is not a Sol verification dependency. Scoped reuse is valid only when the current assessment explicitly cites the historical
+claim while preserving its original runtime/version/scope. Never replace
+historical metadata or create a complete PASS assessment without observed
+acceptance. The checker does not rewrite or bless either record.
 No OMP update, candidate install, promotion, or rollback is supplied here.
 `workflow-omp-health` is the operator entrypoint after deployment or upgrade;
 this reference defines its compatibility evidence and limits.
@@ -181,7 +208,7 @@ claim future compatibility from an unchanged historical result.
 | Hidden compatibility pointers | disable-model-invocation true; exactly one canonical destination; no duplicate body/authority | Native list records hide; URI alias read resolves; enabled `/skill:name` separately | Hidden is not access control or semantic redirection by itself |
 | Prompt visibility | Native system-prompt.ts and agent-session.ts filter hide=true before catalog rendering | Observe actual model-visible list when a non-generating session interface permits | CLI discovery may include hidden entries and does not itself show prompt catalog |
 | Filters | Exact source confirms includeSkills globs and --skills parse/session override | Isolated includeSkills ui-* and code-* lists; CLI --skills launch path where safely possible | Nonmatching aliases excluded, no file-load bypass |
-| Agent definitions/model resolution | YAML/frontmatter/schema parse; seven exact names, selectors, tool/output contracts; effective source precedence checked | Spawn exact managed roles; observe resolved identity, thinking/fallback and definition source | Credentials required for real dispatch; role name alone insufficient |
+| Agent definitions/model resolution | YAML/frontmatter/schema parse; eight exact names, selectors, tool/output contracts; effective source precedence checked | Spawn exact managed roles; observe resolved identity, thinking/fallback and definition source | Credentials required for real dispatch; role name alone insufficient |
 | Resolved-model badge | Setting recognized; pinned render/feed path reviewed | Observe actual task feed badge for resolved model | Config boolean is not rendering or identity proof |
 | Plan Mode | Current settings/state/task read-only boundaries inspected; plan policy unchanged | Native interactive/child permission behavior with harmless fixtures | Source/test actor is not OS isolation |
 | Anti Slop | before_agent_start input/result string[] contract and duplicate handling checked | `node scripts/test_antislop.mjs`; real extension/session loading separately | Handler test is not model obedience or visual result |

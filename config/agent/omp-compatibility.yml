@@ -1,25 +1,27 @@
 schema: 1
 project: omp-docflow
 source_reviewed:
-  omp_version: 18.8.9
+  omp_version: 18.12.1
   channel: stable
-  revision: fa5ff4a3a977a28b93d025f4cf50f046e019f18c
-  date: 2026-10-11
-consultation_append_sha256: 7f504df8c2cdcb9bb378b0685063140e09c9daf60b43d2a0cdff2286cb7a8aa3
+  revision: 291e055836c210f314af3f73f53244e8e9d09de8
+  date: 2026-10-18
+consultation_append_sha256: 7d30f77910426d485b48b034ff4d1bccddbbbf388cd9643b416b5ecbd4cfb600
 last_verified:
   omp_version: 18.8.9
   revision: fa5ff4a3a977a28b93d025f4cf50f046e019f18c
   date: 2026-10-11
   evidence: docs/verification.md#final-plan-enforcement-judge-provenance-and-compatibility-verification--2026-10-11
+  consultation_append_sha256: 7f504df8c2cdcb9bb378b0685063140e09c9daf60b43d2a0cdff2286cb7a8aa3
   mode: known-patched
   behavior:
     luna_direct: PASS
     luna_slow_luna: PASS
     plan_mode_luna: PASS
 candidate_c:
-  default: luna-medium
-  plan: luna-medium
+  default: sol-medium
+  plan: sol-medium
   slow: sol-medium
+  executor: sol-medium
   advisor: sol-high
 required_capabilities:
   - model-roles
@@ -29,6 +31,23 @@ required_capabilities:
   - prompt-customization
   - tool-call-extension
 critical_behavior:
-  - luna-direct
-  - luna-slow-luna
-  - plan-mode-luna
+  - sol-director
+  - sol-executor
+  - plan-mode-sol-director
+current_assessment:
+  omp_version: 18.12.1
+  revision: 291e055836c210f314af3f73f53244e8e9d09de8
+  evidence: docs/verification.md#sol-director-production-candidate-continuation--2026-10-19
+  date: 2026-10-19
+  mode: known-patched
+  payload_sha256: ef1d11c044cb9365af1648353b62845816de7eb92761a740b5d57716441f81e7
+  status: VERIFIED
+  gates:
+    director_luna_sol_core: PASS
+    targeted_messaging_uri: PASS
+    fresh_init_final_input_registration_model_role: PASS
+    approval_reviewer_authority: PASS
+    option_b_security_review: PASS
+    independent_acceptance: PASS
+    plan_boundary: DEFERRED_UNAVAILABLE
+  plan_defer_evidence: docs/verification.md#plan-boundary-user-deferral--2026-10-18

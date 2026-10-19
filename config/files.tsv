@@ -8,6 +8,7 @@ config/agent/agents/scout.md	.omp/agent/agents/scout.md
 config/agent/agents/security-reviewer.md	.omp/agent/agents/security-reviewer.md
 config/agent/agents/slow.md	.omp/agent/agents/slow.md
 config/agent/agents/task.md	.omp/agent/agents/task.md
+config/agent/agents/sol-executor.md	.omp/agent/agents/sol-executor.md
 config/agent/commands/close-open-design.md	.omp/agent/commands/close-open-design.md
 config/agent/commands/start-open-design.md	.omp/agent/commands/start-open-design.md
 config/agent/config.yml	.omp/agent/config.yml
