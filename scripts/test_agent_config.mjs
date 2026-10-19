@@ -207,4 +207,4 @@ rejects("recursive removal unprotected", (cfg) => {
 rejects("prompt masks removal deny", (cfg) => {
   cfg.bash.patterns.sort((a, b) => (a.approval === "prompt" ? -1 : 1) - (b.approval === "prompt" ? -1 : 1));
 }, /protected removal/);
-console.log("Agent configuration contract: Sol-medium main/plan; Luna-medium default workers plus Sol-medium slow and executor; bounded concurrency/depth, managed roles/overrides/selectors, read-only slow admission, retry/fallback and advisor/prewalk/service-tier settings, and native approval agree. Static configuration is not dispatch or installed approval runtime proof.");
+console.log("Agent configuration contract: Sol-medium default/Plan model routing; Luna-medium workers plus Sol-medium slow and executor; bounded concurrency/depth, managed role overrides, read-only specialist admission, retry/fallback and native approval agree. Model selectors are separate from authorization; static configuration is not dispatch or installed runtime proof.");

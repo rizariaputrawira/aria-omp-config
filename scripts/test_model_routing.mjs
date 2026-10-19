@@ -17,6 +17,8 @@ const builtins = ["read", "write", "grep", "glob", "find", "lsp"].map(name => ({
 const wrappers = new Map();
 const events = new Map();
 let effects = 0;
+let executionProfile;
+const registeredFlags = new Map();
 const api = {
   pi: { AgentRegistry: { global: () => registry }, MAIN_AGENT_ID: "Main" },
   getAllTools: () => builtins.map(tool => {
@@ -24,6 +26,8 @@ const api = {
     return wrapper ? { ...tool, sourceInfo: { source: "extension", path: wrapper.sourcePath } } : tool;
   }),
   registerTool: tool => wrappers.set(tool.name, tool),
+  registerFlag: (name, definition) => registeredFlags.set(name, definition),
+  getFlag: name => name === "execution-profile" ? executionProfile : undefined,
   on: (name, fn) => events.set(name, fn),
 };
 const modelByRole = {
@@ -32,21 +36,33 @@ const modelByRole = {
   scout: ["openai-codex", "gpt-6-luna"], slow: ["openai-codex", "gpt-6.1-sol"],
   advisor: ["openai-codex", "gpt-6.1-sol"], "sol-executor": ["openai-codex", "gpt-6.1-sol"],
 };
+const identityCache = new Map();
+function agentIdentity(role, id = "Main", overrides = {}) {
+  const ref = roles[id];
+  const base = { kind: ref?.kind, id, name: role, depth: ref?.kind === "main" ? 0 : 1,
+    ...(ref?.parentId === undefined ? {} : { parentId: ref.parentId }) };
+  if (Object.keys(overrides).length) return { ...base, ...overrides };
+  const key = `${id}:${role}`;
+  if (!identityCache.has(key)) identityCache.set(key, Object.freeze(base));
+  return identityCache.get(key);
+}
 function context(role, id = "Main", overrides = {}) {
   const [provider, model] = modelByRole[role] ?? ["openai-codex", "gpt-6-luna"];
-  const ref = roles[id];
   const currentModel = { provider, id: model };
   return {
-    agent: { kind: ref?.kind, id, name: role, depth: ref?.kind === "main" ? 0 : 1,
-      ...(ref?.parentId === undefined ? {} : { parentId: ref.parentId }), ...overrides },
+    agent: agentIdentity(role, id, overrides),
     cwd: process.cwd(), model: currentModel, models: { current: () => currentModel },
     invokeTool: async () => { effects++; return {}; },
   };
 }
 boundary(api);
+assert.equal(registeredFlags.get("execution-profile")?.type, "string", "the operator profile is a native string flag");
 const handler = events.get("tool_call");
 const startup = events.get("session_start");
+roles.Main.session = null;
 await startup({}, context("main"));
+assert.ok(wrappers.has("read") && wrappers.has("write"), "main wrappers register before session attachment");
+roles.Main.session = {};
 async function call(role, id, toolName, input = {}, overrides = {}) {
   return handler({ type: "tool_call", toolCallId: "case", toolName, input }, context(role, id, overrides));
 }
@@ -89,12 +105,13 @@ await check("final native arguments fail before any effect", async () => {
   }
   assert.equal(effects, 0, "denied final arguments must not invoke the native tool");
 });
-await check("wrong role, identity, model and parent relationship fail closed", async () => {
+await check("invalid role, identity and parent relationship fail closed independent of model", async () => {
   await blocked("task", "worker", "read", { path: "src/auth.ts" }, { parentId: "not-worker" });
+  await blocked("ghost", "worker", "bash", {});
   await blocked("main", "Main", "bash", {}, { kind: "sub" });
   const mismatched = await handler({ type: "tool_call", toolCallId: "case", toolName: "read", input: { path: "x" } },
-    { ...context("main"), models: { current: () => ({ provider: "other", id: "gpt-6.1-sol" }) } });
-  assert.equal(mismatched?.block, true);
+    { ...context("main"), models: { current: () => ({ provider: "other", id: "replacement-shared" }) } });
+  assert.equal(mismatched?.block, true, "director remains restricted after any model change");
   const missing = await handler({ type: "tool_call", toolCallId: "case", toolName: "read", input: {} }, { agent: { kind: "main" } });
   assert.equal(missing?.block, true);
 });
@@ -112,6 +129,12 @@ await check("read-only specialist roles cannot use ambient mutating tools", asyn
   await blocked("scout", "worker", "task", {});
   await blocked("reviewer", "worker", "lsp", { action: "rename", file: "README.md" });
   await blocked("advisor", "worker", "read", { path: "README.md" });
+  const sharedMainModel = { ...context("task", "worker"), models: { current: () => ({ provider: "openai-codex", id: "gpt-6.1-sol" }) } };
+  assert.equal(await handler({ toolName: "bash", input: {} }, sharedMainModel), undefined,
+    "a valid direct child retains its assigned execution contract when sharing the main model ID");
+  const changedReviewer = { ...context("security-reviewer", "review"), models: { current: () => ({ provider: "other", id: "shared" }) } };
+  assert.equal((await handler({ toolName: "write", input: { path: "x", content: "x" } }, changedReviewer))?.block, true,
+    "a security reviewer remains read-only after model replacement");
 });
 await check("security reviewer source paths and native actions are bounded", async () => {
   const parent = await mkdtemp(path.join(os.tmpdir(), "sol-path-boundary-"));
@@ -127,12 +150,13 @@ await check("security reviewer source paths and native actions are bounded", asy
     const localCall = (tool, input) => handler({ type: "tool_call", toolCallId: "path", toolName: tool, input },
       { ...context("security-reviewer", "review"), cwd: root });
     for (const [tool, input] of [["read", { path: "source.md" }], ["read", { path: "clean.md:2" }],
-      ["grep", { pattern: "source", path: "clean.md:raw" }], ["read", { path: "clean.md:raw" }],
+      ["read", { path: "clean.md:1-" }], ["grep", { pattern: "source", path: "clean.md:raw" }], ["read", { path: "clean.md:raw" }],
       ["glob", { path: "*.md" }], ["ast_grep", { pat: "const $X = $Y", path: "clean.md" }],
       ["lsp", { action: "hover", file: "clean.md", line: 1 }]])
       assert.equal((await localCall(tool, input))?.block, undefined);
     for (const [tool, input] of [["read", { path: "source.md:2" }], ["read", { path: "bad;name" }],
-      ["read", { path: "bad,name" }], ["read", { path: "$name" }], ["lsp", { action: "hover", file: "clean.md:2" }]])
+      ["read", { path: "bad,name" }], ["read", { path: "$name" }], ["read", { path: ".aws/credentials:1-" }],
+      ["lsp", { action: "hover", file: "clean.md:2" }]])
       assert.equal((await localCall(tool, input))?.block, true);
   for (const [tool, input] of [["write", { path: "x", content: "x" }], ["edit", {}], ["bash", {}], ["task", {}],
     ["find", { query: "source", path: "README.md" }], ["web_search", {}], ["mcp__server_read", {}], ["custom_tool", {}], ["lsp", { action: "rename" }],
@@ -159,5 +183,44 @@ await check("security reviewer rejects a canonical symlink escape", async () => 
       { ...context("security-reviewer", "review"), cwd: root });
     assert.equal(result?.block, true);
   } finally { await rm(parent, { recursive: true, force: true }); }
+});
+await check("explicit main profile is immutable, model-independent, and limited to ordinary profiles", async () => {
+  const profileEvents = new Map();
+  let selectedProfile = "task";
+  const profileWrappers = new Map();
+  const profileApi = {
+    ...api,
+    getAllTools: () => builtins.map(tool => {
+      const wrapper = profileWrappers.get(tool.name);
+      return wrapper ? { ...tool, sourceInfo: { source: "extension", path: wrapper.sourcePath } } : tool;
+    }),
+    registerTool: tool => profileWrappers.set(tool.name, tool),
+    getFlag: name => name === "execution-profile" ? selectedProfile : undefined,
+    on: (name, fn) => profileEvents.set(name, fn),
+  };
+  boundary(profileApi);
+  const profileStartup = profileEvents.get("session_start");
+  const profileHandler = profileEvents.get("tool_call");
+  await profileStartup({}, context("main"));
+  selectedProfile = "default";
+  const changedModel = { ...context("main"), models: { current: () => ({ provider: "openai-codex", id: "gpt-6-luna" }) } };
+  assert.equal(await profileHandler({ toolName: "bash", input: {} }, changedModel), undefined);
+  const priorEffects = effects;
+  assert.equal(profileWrappers.get("read").approval, "read", "explicit execution retains native read approval metadata");
+  await profileWrappers.get("read").execute("c", { path: "README.md" }, undefined, undefined, changedModel);
+  assert.equal(effects, priorEffects + 1, "explicit execution reaches native invocation through the wrapper");
+  selectedProfile = "default";
+  const defaultEvents = new Map();
+  boundary({ ...profileApi, on: (name, fn) => defaultEvents.set(name, fn) });
+  await defaultEvents.get("session_start")({}, context("main"));
+  assert.equal((await defaultEvents.get("tool_call")({ toolName: "bash", input: {} }, context("main")))?.block, true,
+    "explicit default retains director authority");
+  for (const invalid of ["plan", "scout", "slow", "unknown", ""]) {
+    selectedProfile = invalid;
+    const invalidEvents = new Map();
+    const invalidApi = { ...profileApi, on: (name, fn) => invalidEvents.set(name, fn) };
+    boundary(invalidApi);
+    assert.throws(() => invalidEvents.get("session_start")({}, context("main")), /invalid --execution-profile/);
+  }
 });
 console.log(`Managed role-boundary behavior: ${count} policy and final-argument cases; native runtime admission/approval still requires disposable-session checks.`);

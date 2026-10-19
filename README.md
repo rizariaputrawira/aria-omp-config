@@ -40,8 +40,10 @@ external binaries and services are not. Installation starts no external services
 
 ## Capabilities
 
-- **Consistent model ownership:** Sol-medium directs the task end to end;
-  Luna-medium performs ordinary implementation and bounded worker roles.
+- **Model routing and role authority:** Sol-medium is requested for unforced
+  main and Plan sessions; Luna-medium is routed to ordinary workers. Main is the
+  default director regardless of model, with explicit ordinary direct execution
+  available through `--execution-profile`.
 - **Selective help:** bounded discovery, implementation, and review workers can
   help when useful. Delegation is optional; main integrates and verifies results.
 - **On-demand procedures:** skills cover debugging, UI work, code and security
@@ -148,11 +150,13 @@ capabilities only when their prerequisites and native permissions allow it.
 
 ### Models and bounded delegation
 
-[Current settings](config/agent/config.yml) request `openai-codex/gpt-6.1-sol:medium`
-for fresh unforced main and Plan sessions. Sol directs within current authority;
-Luna-medium performs ordinary implementation and source-review work. A distinct
-`sol-executor` handles explicitly assigned implementation; neither role mapping
-automatically activates an integration or grants broader permissions.
+The current settings request Sol-medium for fresh unforced main and Plan
+sessions. Model selectors route inference; they do not grant role authority.
+Main defaults to director mode, independent of its model. An operator may
+select direct execution on a main session with `--execution-profile
+smol|routine|task|executor`; `default` or omission retains director mode.
+The validated selection is fixed for that session. Plan Mode remains subject
+to native restrictions.
 
 | Role | Use when useful | Configured model |
 |---|---|---|
@@ -180,8 +184,9 @@ blocked. Recovery is bounded to two materially distinct attempts; see the
 [canonical recovery and acceptance procedure](config/agent/PERSONALITY.md#capability-ownership-and-blockers).
 Implementation verification and independent acceptance are separate required
 gates where applicable. If independent acceptance fails, protected work stops;
-the user controls any disposition, and the managed Sol director needs no model
-switch to report that stop. Sol consultation does not substitute for acceptance.
+the user controls any disposition, and main reports and integrates regardless
+of its selected model. The optional Sol-medium decision service does not
+substitute for acceptance.
 Workers pause affected work on consequential unresolved choices and report
 evidence, alternatives, uncertainty, and pending verification to main before
 dependent decisions. Missing credentials or tools are environment blockers, not
@@ -327,7 +332,7 @@ authorized vertical slices, verify behavior and reconcile affected as-built owne
 Keep the operative approved scope and canonical references through mode changes.
 
 Start interactive `omp`, then enter `/vibe`. There is no `--vibe` CLI flag.
-For a user-selected Sol director, start with:
+For a user-selected Sol model, start with:
 
 ```sh
 omp --model openai-codex/gpt-6.1-sol --thinking medium
@@ -336,10 +341,10 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 Use `--thinking high` when consequential decisions, complex integration or
 difficult reasoning justify it. Medium is a starting recommendation for
 well-defined execution and routine coordination, not a forced routing rule.
-The managed config assigns Luna-medium to delegated workers and Sol-medium to
-main and Plan. Sol may decide a consequential question directly when evidence
-and authority suffice, without a mandatory `slow` consultation; independent
-security review, acceptance and native approval remain separate.
+The managed config requests Luna-medium for delegated workers and Sol-medium
+for main and Plan. Main may decide a consequential question directly when
+evidence and authority suffice, without a mandatory `slow` consultation;
+independent security review, acceptance and native approval remain separate.
 
 | Native tier | Responsibility | Current model resolution |
 |---|---|---|

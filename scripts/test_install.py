@@ -11,6 +11,7 @@ import socketserver
 import subprocess
 import tempfile
 import threading
+import time
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,8 +21,28 @@ INVENTORY = ROOT / "config" / "files.tsv"
 
 
 def run(*args: str, env: dict[str, str] | None = None, expected: int = 0) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(args, cwd=ROOT, env=env, text=True, capture_output=True)
+    label = " ".join(args)
+    print(f"START subprocess: {label}", flush=True)
+    started = time.monotonic()
+    try:
+        result = subprocess.run(args, cwd=ROOT, env=env, text=True, capture_output=True, timeout=60)
+    except subprocess.TimeoutExpired as error:
+        elapsed = time.monotonic() - started
+        stdout = error.stdout or ""
+        stderr = error.stderr or ""
+        print(f"TIMEOUT subprocess after {elapsed:.2f}s: {label}", flush=True)
+        raise AssertionError((args, "timed out after 60s", stdout[-1200:], stderr[-1200:])) from error
+    elapsed = time.monotonic() - started
+    print(f"END subprocess: {label} ({elapsed:.2f}s, exit {result.returncode})", flush=True)
     assert result.returncode == expected, (args, result.returncode, result.stdout[-1200:], result.stderr[-1200:])
+    return result
+
+
+def stage(label: str, operation):
+    print(f"START {label}", flush=True)
+    started = time.monotonic()
+    result = operation()
+    print(f"END {label} ({time.monotonic() - started:.2f}s)", flush=True)
     return result
 
 
@@ -78,7 +99,7 @@ def main() -> None:
     rows = mappings()
     with tempfile.TemporaryDirectory(prefix="omp install tests ") as tmp_name:
         tmp = Path(tmp_name)
-        source = make_fixture(tmp)
+        source = stage("fixture creation", lambda: make_fixture(tmp))
         home = tmp / "home with spaces"
         home.mkdir()
 

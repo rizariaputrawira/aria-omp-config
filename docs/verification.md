@@ -1,4 +1,109 @@
 # Verification and current limits
+## Model-independent role boundary — 2026-10-19
+
+The managed boundary now treats native agent identity and registered parentage,
+not provider/model IDs, as role authority. Main defaults to director mode.
+`--execution-profile` is an explicit native string flag; only `default`,
+`smol`, `routine`, `task`, and `executor` are accepted. The extension captures
+the validated value once against the frozen native main identity in its
+session-local closure. Replacing the model or changing the mutable flag later
+does not change that snapshot. Direct main execution uses the existing native
+tools and approval flow; Plan Mode and child specialist restrictions remain.
+
+Pinned OMP source revision
+`1d5aff90b057ce7dbfe32ea557a527c1b3144b72` creates a frozen extension identity
+from native kind/id/name/depth/parent (`sdk.ts:3422–3428`); the runner's
+`createContext` defaults to its stable identity (`runner.ts:1407–1438`), and
+session extension instances have independent APIs/runtimes (`sdk.ts:1061–1065`).
+The SDK registers the agent with `session: null` before constructing its
+`AgentSession`, then attaches the session afterward (`sdk.ts:4174–4207`,
+`4676`, `5085–5100`). This justifies not requiring attachment during startup
+wrapper registration while still requiring a registered, attached session at
+tool-call time. The exact `session_start` dispatch site/order relative to
+attachment remains unlocated. A disposable installed-OMP invalid-profile probe
+did reach the boundary's `session_start` handler: its error occurs after the
+handler's native-main identity/registry checks and before later provider auth.
+That does not prove whether `ref.session` was attached at the time. The
+historical occurrence of the prior combined denial remains unobservable. Source
+proves model equality previously participated in authorization; it does not
+prove which predicate caused that historical rejection.
+`node scripts/test_model_routing.mjs`, `bun scripts/test_agent_config.mjs`,
+`bun scripts/test_skill_catalog.mjs`, `bun scripts/test_omp_compat.mjs`, and
+`bun scripts/test_document_locations.mjs` passed after the implementation
+edits. Routing coverage includes model-independent main authority, startup
+registration with an unattached main ref, profile validation/immutability,
+ordinary-profile direct tool invocation through the native wrapper, final
+director-input guards, and specialist restrictions. Synthetic coverage does
+not substitute for authenticated native tool-call proof.
+
+Isolated installed-OMP probes used version 18.12.2, a clean environment and
+disposable homes/repositories under `/mnt/d`; no credentials were read or
+copied. `--execution-profile plan` produced the extension's exact invalid-value
+error before the subsequent missing-API-key failure. `--execution-profile
+task` and `--execution-profile default` passed extension startup and reached the
+missing-API-key failure. This observes native flag parsing and the startup
+validation path, not tool calls, model execution, native approvals, or
+authenticated behavior. Initial use of
+`/tmp` failed native-addon extraction with ENOSPC (11 MiB free); the distinct
+`/mnt/d` location had 121 GiB free and the subsequent runtime probes succeeded
+to the stated boundaries.
+
+A separate disposable Git fixture pushed one committed test file to its local
+bare `origin`; local and bare branch/commit inspection matched and the working
+tree tracked `origin/smoke`. This is Git plumbing evidence only, not OMP tool
+authorization or a production-remote test.
+`TMPDIR=/run/user/1000 python3 -u scripts/test_install.py` completed successfully
+after the prior implementation-smoke failure. The source read confirmed
+`import zipfile` at `scripts/test_install.py:15`; the restored import was
+present before this run. Capacity check immediately beforehand reported 824,248
+KiB available on `/run/user/1000`. The runner created fixtures in 4.08s,
+reported each subprocess start/end and duration, and finished with
+`POSIX installer/doctor integration checks passed for 300 inventory entries.`
+The bounded run took 154.62s overall; all runner subprocesses completed within
+their 60s timeout. Output is preserved at
+`/run/user/1000/test-install-current.txt`. This used disposable fixtures and
+homes; no production installation occurred. PowerShell runtime was detected,
+but this POSIX runner does not execute the separate PowerShell tests; Windows
+installer/doctor behavior remains unverified.
+
+
+Independent security discovery/refutation remains pending. The current
+repository and user-home `security-reviewer.md` SHA-256 both match
+`b1623800ff32e516dcab5aae2bba1879d14c56dbdf95a775a435d06293a62996`;
+the active user-home `security-review` procedure and shared security lifecycle
+were read. This local hash agreement does not establish the effective dispatched
+definition or reviewer identity. Formal strict Option B, independent security
+review, exact-file binding and release readiness remain unproven.
+
+A minimal authenticated role smoke was subsequently run on OMP 18.12.2 in
+`/mnt/d/role-candidate-verify-20261019/minimal-checks`. The candidate extension
+and config were supplied explicitly; the candidate task definition was staged
+under the disposable workspace's `.omp/agents`. In the default director session,
+one direct Bash attempt was denied by the managed boundary before command
+execution. One native `task` child ran as `task` on Luna Medium, wrote the
+34-byte `director-worker.txt`, and its parent received and integrated the
+terminal result. The task was actually asynchronous because the temporary
+`task.async.enabled:false` overlay was mis-scoped; synchronous TaskTool behavior
+remains unverified.
+
+A subsequent direct-executor session explicitly supplied
+`--execution-profile executor` and appended the candidate `PERSONALITY.md`.
+The captured native session used Main on Sol Medium; its read/write tools were
+provided by the candidate boundary extension. Native write of the exact
+34-byte `executor-result.txt` and a Bash `cmp` check both succeeded, with no
+delegation. Detailed session locators, exact outputs, candidate hashes and the
+capture limitation are recorded in
+`/mnt/d/role-candidate-verify-20261019/minimal-checks/runtime-evidence.md`.
+
+Both the director run and corrected executor run emitted a GitHub MCP startup
+warning (HTTP 400, invalid token), even with temporary project-level disabled
+entries; no MCP tool was exposed or called. This is bounded tool-behavior
+evidence, not a clean no-network isolation claim. The normal default OMP auth
+path was used without reading/copying auth contents; no production config was
+installed or changed, and no Git/remote action was performed. Earlier runs
+using a temporary auth-store link are invalidated and are not acceptance
+evidence.
+
 
 ## Writing-authenticity and content-provenance-audit implementation — 2026-10-19
 
@@ -3166,3 +3271,43 @@ No installer/live-home deployment, OMP compatibility upgrade, authenticated
 GitHub request, service connection, native-Windows run, rendered-page review or
 device performance measurement was part of this change. Existing compatibility
 and security-assurance limitations elsewhere in this record remain unchanged.
+
+## OMP 18.12.2 Option B strict-review closure — incomplete
+
+Three fresh named specialist phases ran through the native strict task interface:
+`CurrentSecurityDiscovery`, `CurrentSecurityRefutation`, and
+`CurrentSecurityCoverageChallenge`. Persisted session events identify
+`openai-codex/gpt-6-luna` with actual `thinkingLevel: medium` for each; the
+selected controlled `.omp/agents/security-reviewer.md` body matched its current
+SHA-256 `b1623800ff32e516dcab5aae2bba1879d14c56dbdf95a775a435d06293a62996`.
+The 34-entry source snapshot matched all present code/policy files; its
+`docs/minimal-checks-runtime-evidence.md` entry is absent from this checkout and
+could not be verified here. The previously accepted narrow role and installer
+evidence was reused, not rerun. Historical failed/incomplete launch records are
+preserved as invalid evidence. Full strict results, transcripts and current
+capture are under `/mnt/d/role-candidate-verify-20261019/current-preflight/`,
+including `capture/interactive-discovery.jsonl`,
+`capture/two-review-phases-final.jsonl`, and `sessions/two-review-phases-final/`.
+
+The reviewers retained the pathname validation-to-consumption TOCTOU as
+conditional; no new defect was confirmed, and it is neither confirmed as
+exploitable nor fixed. An attempted root-directory read was denied by the
+managed scope guard. Ambient MCP tool names were present in child active tools,
+with no MCP invocation observed. Native denial-before-effect ordering for those
+admitted names is not established. Option B provenance does not cryptographically
+attest the exact selected definition and does not establish OS isolation.
+Git verification and Plan verification remain user-deferred and NOT VERIFIED.
+
+**Implementation status: DONE for the implemented role-boundary correction.**
+The user has authorized production deployment, subject to reviewing the
+non-mutating installer preview and doctor results before any live writes.
+Ambient MCP denial-before-effect enforcement is user-deferred to manual testing
+and remains **NOT VERIFIED**, not PASS. Manual testing does not retroactively
+establish that missing evidence. The conditional TOCTOU concern remains
+needs-validation, neither confirmed exploitable nor fixed.
+
+This disposition changes no candidate code/policy and does not alter the
+historical incomplete acceptance evidence above. It authorizes deployment but
+does not claim security acceptance, Plan support, or Git verification. No
+production installation, commit, push, or credential/auth-state change has
+occurred as of this record.
