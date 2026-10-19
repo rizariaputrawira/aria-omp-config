@@ -1,9 +1,9 @@
 # Skill payload provenance and license boundaries
 
 Source catalog basis: inspected current checkout; the historical source baseline
-remains a separate provenance fact. The current result contains 37 canonical
-capabilities (34 visible, three explicit-only), 14 hidden locally authored
-compatibility pointers, 269 skill assets and 294 explicit mappings. Counts do
+remains a separate provenance fact. The current result contains 39 canonical
+capabilities (36 visible, three explicit-only), 14 hidden locally authored
+compatibility pointers, 274 skill assets and 300 explicit mappings. Counts do
 not prove native discovery or legal clearance.
 
 Public capability names are separate from source identities. Renaming never erases
@@ -231,3 +231,7 @@ acceptance. Historical unpinned import revisions remain unknown for confirmed
 Emil/Taste adaptations, Ponytail body lineage remains unresolved, and Stitch is
 still source-uncertain. See [migration](../docs/migration.md) and
 [current verification and limits](../docs/verification.md).
+
+## Original writing and artifact-provenance procedures
+
+`writing-authenticity` and `content-provenance-audit` are independently authored local OMP procedures in their respective package `SOURCES.md` records. No external procedure text, examples, implementation, detector or parser is copied or bundled. No external license is claimed. The content-provenance-audit technical references inform evidence limits only; they are not runtime dependencies. Exact local payloads are mapped in `config/files.tsv`; conditional consumers are in `config/agent/AGENTS.md`. Writing audit defaults read-only and editing needs authority. Provenance inspection is read-only, makes no authorship verdict, and does not claim tools or formats unavailable to the actual local inspection method.

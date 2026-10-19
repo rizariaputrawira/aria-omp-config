@@ -19,6 +19,7 @@ retain native authority boundaries. [Decisions](docs/capabilities.md),
 | git- | Repository collaboration and change lifecycle | [git-change-status](config/agent/skills/git-change-status/SKILL.md), [git-commit-message](config/agent/skills/git-commit-message/SKILL.md), [git-pr-work](config/agent/skills/git-pr-work/SKILL.md), [git-triage](config/agent/skills/git-triage/SKILL.md) |
 | security- | Distinct source trust boundaries | [security-audit](config/agent/skills/security-audit/SKILL.md), [security-intake](config/agent/skills/security-intake/SKILL.md), [security-review](config/agent/skills/security-review/SKILL.md) |
 | agent- | Instructions consumed by agents | [agent-guidance](config/agent/skills/agent-guidance/SKILL.md) |
+| writing and content provenance | Explicit or substantial editorial analysis/editing and authorized artifact provenance inspection | [writing-authenticity](config/agent/skills/writing-authenticity/SKILL.md), [content-provenance-audit](config/agent/skills/content-provenance-audit/SKILL.md) |
 
 Natural exceptions: [swift-development](config/agent/skills/swift-development/SKILL.md)
 for Swift, [stitch-design-input](config/agent/skills/stitch-design-input/SKILL.md)
@@ -54,7 +55,9 @@ for broader brand-board/logo-world concepts.
   An explicit request for those actions counts as task authority under
   [the canonical working policy](config/agent/PERSONALITY.md); native approval
   still applies. `git-commit-message` itself remains read-only.
+
   `git-pr-work` implements requested scope and may draft unpublished PR text.
+- `writing-authenticity` is for explicit or substantial human-facing writing review/editing; it is not an authorship detector, and audit is read-only unless a revision is authorized. `content-provenance-audit` is for authorized read-only artifact inspection/comparison; it does not execute artifacts or prove authorship. Neither runs as a routine blanket pass.
 
 ## Legacy names and filters
 

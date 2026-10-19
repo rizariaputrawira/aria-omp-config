@@ -2,8 +2,8 @@
 
 Inspected source baseline: current `main` commit `7ac5bda055f1ce27e604dde95a898b7307ac6dca` and actual one-level SKILL.md frontmatter, not historical catalog counts.
 Baseline: 35 upstream input capabilities.
-Result: 37 canonical capabilities, 34 model-visible and 3 explicit-only, including
-two local additions: `workflow-omp-health` and `ui-browser`, plus 14 hidden compatibility pointers.
+Result before the additions below: 37 canonical capabilities, 34 model-visible and 3 explicit-only, including
+two local additions: `workflow-omp-health` and `ui-browser`, plus 14 hidden compatibility pointers. The two independently authored additions below bring the inventory to 39 canonical (36 model-visible, 3 explicit-only); five explicit deployed files bring the prior 295 mappings to 300 and 269 skill assets to 274.
 
 This file owns detailed semantic inventory. [Decisions](capabilities.md) own
 dispositions; [migration](migration.md) owns old identifiers; package SOURCES.md
@@ -57,6 +57,8 @@ on one owner. See [migration](migration.md) for explicit alias classifications.
 | web-motion | ui-web-motion | RENAME / ui-. | Model-visible canonical. | animate, improve-animations, review-animations, find-animation-opportunities, animation-vocabulary, web-motion. |
 | work-with-pr | git-pr-work | RENAME / git-. | Model-visible canonical. | work-with-pr. |
 | writing-for-agents | agent-guidance | RENAME / agent-. | Model-visible canonical. | writing-for-agents. |
+| local addition | writing-authenticity | ADD / writing- | Model-visible canonical. | No historical alias. |
+| local addition | content-provenance-audit | ADD / content- | Model-visible canonical. | No historical alias. |
 
 ## Capability contracts
 
@@ -103,6 +105,8 @@ owner's SKILL.md for execution.
 | web-motion | Build/name/suggest web motion; opt-in audit or explicit diff review. | Implementation only when authorized; reviews never approve. | Select build/opportunities/vocabulary/audit/diff-review branch. | Motion code, definitions, audit/plan or findings. | Web/browser, not Expo. | ui-design, ui-gesture-design. |
 | work-with-pr | Authorized bounded issue/change implementation and PR preparation. | No implicit branch/commit/push/publish/merge. | Define scope, implement/verify and optionally draft PR metadata. | Implementation and unpublished PR draft. | Git/GitHub project. | git-triage, code-review. |
 | writing-for-agents | Author guidance/skills or separately authorized behavior assessment. | Authoring does not grant assessment/runtime authority. | Establish consuming contract, one owner and source-loaded proof. | Guidance edits or scoped assessment. | Agent/harness guidance. | docs-engineering, workflow-upstream-review. |
+| writing-authenticity | Explicit writing-quality review, substantial editorial analysis or requested edit. | Read-only by default; edit only when requested/authorized. | Inspect audience, evidence, meaning, voice and format; preserve factual and semantic constraints; compare revision with original. | Located audit observations or authorized revised artifact with unresolved issues stated. | Human-facing writing; EN and ID context-sensitive. | code-review, agent-guidance. |
+| content-provenance-audit | Authorized artifact provenance inspection or comparison. | Read-only; no execution, upload, external detector or artifact modification. | Classify evidence by method, exact input/location, confidence, limits and uninspected layers. | Bounded evidence findings; never authorship verdict. | Local raw/format-aware methods only when available. | security-intake, security-review, security-audit. |
 
 ## Source, notices and OMP coupling
 
@@ -150,6 +154,8 @@ unresolved provenance.
 | web-motion | S1 | MIT notice LICENSE.emil. | C1 |
 | work-with-pr | S5 | No imported third-party notice or inferred new grant. | C1 |
 | writing-for-agents | S2 | LICENSE.superpowers; LICENSE.matt. | C1 |
+| writing-authenticity | S9 | No imported third-party notice or inferred new grant. | C1 |
+| content-provenance-audit | S9 | No imported third-party notice or inferred new grant. | C1 |
 
 ### Source keys
 
@@ -161,9 +167,21 @@ unresolved provenance.
 - **S6:** Leonxlnx/taste-skill@ce26fc25c0e5e8cab638f883de62d9a86ee5e45b; SOURCE UNCERTAIN, candidate notice only; see package SOURCES.md.
 - **S7:** pbakaus/impeccable@508d7e8955de3b3caf2d8676e85206723d41a887; adapted SKILL and separate independent local references.
 - **S8:** Microsoft `@playwright/cli@0.1.22`, npm license Apache-2.0, repository `microsoft/playwright-cli`; installed for the local WSL user. No upstream skill text is redistributed; see [source and security intake](../config/SKILL-SOURCES.md#playwright-cli).
+- **S9:** Independently authored local writing-authenticity and content-provenance-audit procedures; no external expression or runtime dependency; per-package SOURCES.md.
 
 ### Coupling keys
 
 - **C1:** LOW: flat SKILL.md/reference, metadata, native URI/command/filter contract.
 - **C2:** MEDIUM: optional Impeccable engine/launcher; passive procedure LOW.
 - **C3:** LOW: optional globally installed CLI/browser binaries; `ui-browser` is passive OMP skill metadata and guidance.
+
+## Local additions — writing and provenance
+
+These two independently authored canonical capabilities extend the earlier inspected inventory; they do not alter existing capability identities or source rows.
+
+| Canonical name | Trigger and authority | Contract/output | Source and notice | OMP coupling |
+|---|---|---|---|---|
+| `writing-authenticity` | Explicit or substantial editorial review/edit; edit only when requested/authorized. | Audit findings or authorized revision compared against original; preserve facts, meaning, voice, evidence, structure and uncertainty. No authorship verdict or detector evasion. | Local independent expression; no external procedure or license claim; package `SOURCES.md`. | C1 passive skill and conditional routing. |
+| `content-provenance-audit` | Authorized artifact inspection/comparison. | Read-only evidence classes, exact scope/location/method and limitations; no authorship verdict, execution or modification. | Local independent expression; technical research references only; no runtime tool/dependency; package `SOURCES.md`. | C1 passive skill and conditional routing. |
+
+No detector, parser, verifier or source processor is part of the deployment inventory. Skill loading and actual method/tool availability are separate claims.

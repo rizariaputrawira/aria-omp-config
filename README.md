@@ -46,6 +46,7 @@ external binaries and services are not. Installation starts no external services
   help when useful. Delegation is optional; main integrates and verifies results.
 - **On-demand procedures:** skills cover debugging, UI work, code and security
   review, Git tasks, and documentation without loading every procedure at once.
+- **Writing and provenance:** opt-in [writing review](config/agent/skills/writing-authenticity/SKILL.md) preserves meaning and does not detect authorship; [artifact provenance review](config/agent/skills/content-provenance-audit/SKILL.md) is read-only and reports evidence limits without authorship verdicts.
 - **Native planning and approval:** OMP provides Plan Mode and tool approvals;
   the guidance does not create a second permission system.
 - **Two development paths:** ordinary changes stay lightweight; new applications

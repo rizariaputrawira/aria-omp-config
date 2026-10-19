@@ -1,5 +1,171 @@
 # Verification and current limits
 
+## Writing-authenticity and content-provenance-audit implementation — 2026-10-19
+
+**Phase 4 checks:** `bun scripts/test_skill_catalog.mjs` PASS — 39 canonical capabilities (36 model-visible, 3 explicit-only), 14 hidden aliases, 274 mapped skill assets, 300 managed mappings and 40 notices; source/license metadata plus URI/relative/heading references checked. `bun scripts/test_agent_config.mjs` PASS — configured roles/admission boundaries unchanged. `node scripts/test_model_routing.mjs` PASS — 9 grouped policy/final-input cases. `bun scripts/test_omp_compat.mjs` PASS. `node scripts/test_antislop.mjs` PASS — 16 positive and 18 negative handler cases. `git diff --exit-code 3942d62fabbc501f641903ae9d5c4d67583bc60f -- config/agent/extensions/antislop.js config/agent/extensions/LICENSE.antislop` exited 0; both files remain unchanged from the established baseline.
+
+`python3 scripts/test_install.py` first failed because `/tmp` was full (7.7G used, 12M free). The single retry with the distinct temporary location, `TMPDIR=/run/user/1000 python3 scripts/test_install.py`, passed POSIX installer/doctor integration for all 300 inventory entries. No production home was installed. `powershell.exe -NoProfile -File 'D:\user\personal\project\omp-config\scripts\test_install.ps1'` was attempted and blocked by the system execution policy; no bypass was attempted. PowerShell installer/doctor behavior remains unverified.
+
+**Source-loaded OMP behavior observation, not native skill discovery/registration:** Installed `omp` reports v18.12.2. A no-session, no-tools print turn appended `config/agent/skills/writing-authenticity/SKILL.md` via `--append-system-prompt` and was given this fixture: `Audit this exact text read-only: "The private beta doubled customer satisfaction, and every customer said the new page changed their life." No supporting data or testimonials are supplied. Return location, evidence, and a proportionate suggestion. Do not infer authorship.` The result identified the unsupported quantitative and universal customer-quote claims, requested measurements/feedback or removal, and made no authorship inference. OMP transcript metadata named provider `openai-codex`, model `gpt-6.1-sol`; `--no-session --no-title --no-extensions --no-rules --no-skills --no-tools` were used. This exercises the source body supplied as a system-prompt file and the model's response only; it does not prove OMP skill discovery, slash invocation, consistent future behavior, or independent evaluation.
+
+A separate `-p '/skill:writing-authenticity …'` probe treated the slash text as ordinary prompt content in print mode and is **not** invocation evidence. One interactive probe was terminated before input after runtime startup reported MCP connections (OpenDesign connected, GitHub failed with HTTP 400 invalid-token); neither server was used by this task, no credentials were inspected or repaired, and no external integration was activated intentionally. Temporary overlay configuration was removed. Native interactive skill invocation, `content-provenance-audit` behavioral use, EN/ID comparisons, artifact-specific CSV/spreadsheet/slides/report/AI-schema cases, native discovery/filter/loading, and worker-packet behavior remain unverified. The implementation assignment did not expose authorized native task dispatch; no worker was spawned. Static/catalog checks cannot replace those proofs.
+
+Independent Phase 6 acceptance remains pending. No production installation, commit, push or Phase 6 review occurred.
+## Phase 5 source-consumption and behavior evidence — 2026-10-19
+
+This worker received the Phase 5 packet and read the complete checkout
+`config/agent/skills/writing-authenticity/SKILL.md` (lines 1–31),
+`config/agent/skills/content-provenance-audit/SKILL.md` (lines 1–24), and
+`config/agent/skills/content-provenance-audit/references/evidence-types.md`
+(lines 1–23), then applied their contracts to the exact supplied cases in its
+native response. This is source consumption and observed procedure behavior,
+not automatic installed-policy, worker-propagation, slash-command, or
+natural-language routing proof.
+
+English input: `On 2026-10-19, Beta 2.4 processed 1,250 rows in 3.2 s [R1]. This revolutionary tool delights every user.`
+Audit: first sentence is a supplied claim, not independently verified;
+`revolutionary` and `delights every user` are unsupported value/universal
+claims. Authorized concise revision: `On 2026-10-19, Beta 2.4 processed 1,250
+rows in 3.2 s [R1].` Comparison: date, product/version, count, duration, unit,
+and citation are retained; unsupported claims are removed; no user experience
+or fact was added. Disposition: edit authorized by the case.
+
+Indonesian input: `Pada 19 Oktober 2026, versi 2.4 memproses 1.250 baris dalam 3,2 detik [R1]. Solusi revolusioner ini pasti disukai semua pengguna.`
+Audit: the first sentence is a supplied, unverified claim; `revolusioner` and
+`pasti disukai semua pengguna` are unsupported evaluative/universal claims.
+Register-appropriate revision: `Pada 19 Oktober 2026, versi 2.4 memproses
+1.250 baris dalam 3,2 detik [R1].` Comparison retains the date, version, row
+count, duration, decimal/grouping conventions and citation; it adds no claim.
+No-change technical passage: `run_job --rows 1250` (`src/job.ts`) — correct
+identifiers/command/path, left byte-for-byte unchanged; no style edit.
+
+Mixed deliverables, exact inputs and observed disposition:
+- Command/path: `run_job --rows 1250`, `src/job.ts` — unchanged.
+- CSV: `item,qty,unit_price,total` / `A,3,12500,=B2*C2` — headers, values and
+  formula unchanged; no invented data or unit assumptions.
+- Slide/report copy: `Beta 2.4 processed 1,250 rows in 3.2 s [R1].` — retains
+  supplied evidence/citation as supplied, not independently validated; no
+  invented citation or stronger claim. In supplied Word/PDF copy, same text
+  review applies, but binary document structure and embedded metadata were not
+  inspected from text.
+- AI payload exact valid unchanged JSON:
+  `{ "max_rows": 1250, "timeout_s": 3.2, "required": ["source"] }`
+  Keys, numeric types/values and array are unchanged; no prose humanization.
+
+Raw-text provenance smoke: after `df -Pk /run/user/1000` reported 824,508
+1024-byte blocks available, a disposable directory
+`/run/user/1000/provenance-smoke.tOYGp1` held two UTF-8 files. Input 1 bytes
+were `[65,226,128,139,66]`, decoded as `A​B`, code points
+`U+0041` at offset 0, `U+200B ZERO WIDTH SPACE` at offset 1, and `U+0042`
+at offset 2. Input 2 bytes were `[65,66]`, decoded `AB`, code points `U+0041`
+at offset 0 and `U+0042` at offset 1. Method: Node.js standard-library
+`fs.readFileSync`, UTF-8 decoding, and code-point iteration; no detector or
+document parser. SHA-256 before and after inspection was identical for each:
+`1551a9daec51818458524171931eedd1ac8aa2e97cf1741ce1ec280c555aff41`
+(with U+200B) and
+`38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153`
+(without). Both fixture files and directory were removed after the reads.
+The observed difference is a code point, not evidence of intent or
+authorship; joiners/controls can have legitimate multilingual uses.
+User statements `before author='Editor'` and `after author='Tool'` are supplied
+metadata claims, not raw-artifact observations; actual field values and
+authenticity are unknown. PDF binary inspection: unsupported/not performed
+(no parser); watermark verifier: unavailable/not inspected. The supplied
+scenario “C2PA validator reports a valid signature” is only an assertion
+about validator output, not actual cryptographic verification here; even a
+valid signature would not establish assertion truth. Content binding and trust
+evaluation are not inspected. No external detector, verifier or upload was
+used; no original artifact was modified.
+
+Native runtime discovery, using `omp skill list --json`, produced output
+`artifact://42`; this is the installed Skillshare/registry listing, not proof
+of local managed skill discovery. Its listing omits the new skills, which are
+not production-installed by design. The combined subsequent command
+`omp read skill://writing-authenticity && omp read
+skill://content-provenance-audit` exited 126 with:
+`error: cannot resolve skill://writing-authenticity for an external command:
+No such file or directory (os error 2)`. This is not a controlled
+disposable-home local-loader test. No supported isolated local native loader
+probe was run; native local loading and automatic routing remain unverified.
+Checkout source reads and the actual procedure application above do not imply
+installed-policy or automatic worker-propagation proof.
+
+The `workflow-upstream-review` discovery procedure was read and applied to
+available managed-source evidence. `config/agent/skills/writing-authenticity/SOURCES.md`
+lines 17–19 identify Songer and Humanizer as reference-only concepts consumed
+through writing-authenticity, and Undetectable AI as research/rejection rather
+than a runtime/deployment consumer. `config/agent/skills/content-provenance-audit/SOURCES.md`
+lines 19–24 identify C2PA 2.4 and Unicode TR36 as research-only references,
+not dependencies. `config/agent/extensions/antislop.js` lines 1–15 identify
+the Anti-Slop adaptation; `config/agent/skills/security-intake/SOURCES.md`
+lines 5–14 map NVIDIA SkillSpector to security-intake. `config/files.tsv`
+lines 292–296 maps the five new skill assets; `config/agent/AGENTS.md` lines
+34–36 contains the conditional consumer pointers. I ran the existing read-only
+`bun scripts/test_skill_catalog.mjs` reconciliation. It completed successfully:
+`Skill catalog: 39 canonical (36 model-visible, 3 explicit-only), 14 hidden
+aliases, 274 mapped assets, 300 mappings, 40 notices; source/license metadata
+and URI/relative/heading references checked.` This reconciles deployable skill
+assets against `config/files.tsv`, canonical entrypoints/aliases and identity,
+capability/provenance records; structural coverage is not license compliance
+or runtime proof. This is inventory/discovery evidence, not an upstream
+adoption/security review.
+
+An isolated loader attempt followed the documented compatibility recipe without
+starting a session/model/MCP: `sh install.sh --home
+/run/user/1000/skill-loader.E4uPFE/home` staged the managed inventory in that
+disposable home, including both new skill directories. From an empty
+`/run/user/1000/skill-loader.E4uPFE/workspace` with
+`HOME=/run/user/1000/skill-loader.E4uPFE/home` and
+`PI_CODING_AGENT_DIR=/run/user/1000/skill-loader.E4uPFE/home/.omp/agent`,
+`omp read skill://writing-authenticity` and
+`omp read skill://content-provenance-audit` each exited 126 with
+`error: cannot resolve skill://<name> for an external command: No such file or
+directory (os error 2)`. Both failed lookups were repeated from that isolated
+workspace; no model/session was launched. The disposable install and workspace
+were removed afterward.
+
+Installed runtime facts inspected: `/home/personal/.local/bin/omp` resolves
+to itself and `file` identifies it as a 255,195,104-byte x86-64 ELF executable.
+`omp --help` reports `--no-skills`, `--skills=<value>`, `--profile` and
+`--config`, but exposes no public standalone skill-loader/list command.
+`omp read --help` supports reading paths/internal URIs. The repository's
+documented passive recipe says isolated `HOME`, `PI_CODING_AGENT_DIR`,
+`omp skill list --json`, then `omp read skill://ui-design`; the first CLI
+subcommand is Skillshare registry management rather than local loader
+discovery. No documented exported loader API or inspectable installed package
+source path was available from this resolved executable/help surface. The
+isolated URI reads demonstrate that this CLI path did not resolve the local
+entries, not that model-session local loading is impossible. Native standalone
+local skill metadata loading is therefore unverified; do not infer slash
+expansion, automatic routing or policy application.
+
+Native Windows behavior remains blocked by the previously recorded
+execution-policy denial. The author's unchanged implementation checks remain
+reported above; this worker ran no tests and Phase 6 independent acceptance
+remains pending.
+
+## Phase 6 independent acceptance — 2026-10-19
+
+Fresh native checker `FinalAcceptance`, independent of implementation author
+`AuthenticityImplementation` and behavior verifier `BehaviorVerification`,
+returned **ACCEPTED WITH EXPLICIT LIMITATIONS**, `findings: []`. It inspected
+the current source/packages, evidence, and bounded source diff against
+`3942d62fabbc501f641903ae9d5c4d67583bc60f` (`artifact://55`). No actionable
+patch-introduced defect was identified. Acceptance covers task-owned
+source/catalog/inventory/documentation and bounded source-loaded behavior only.
+
+Explicit limits remain: installed discovery, picker, slash invocation,
+automatic routing and default activation are unverified; native Windows
+installer/doctor remains blocked by execution policy; actual C2PA, watermark,
+media, PDF and OOXML parsing were not exercised; slide layout and general
+spreadsheet application behavior were not established. This is not legal
+clearance or security certification. No separate specialist security-review
+gate was triggered by passive original instructions-only additions without a
+dependency or enforcement change. Acceptance authorizes no production
+installation/upgrade, commit or push. No tests were rerun for this acceptance
+receipt and no implementation was changed.
+
+
 ## Sol-director production-candidate continuation — 2026-10-19
 
 **Status: VERIFIED within the explicitly Plan-excluded scope; READY FOR

@@ -3,8 +3,8 @@
 Canonical public names communicate capability, not source branding. Public skills
 remain one level beneath the native skills root. Source identity, copyright and
 licenses remain separate. [Inventory](capability-inventory.md) covers every one
-of the 35 baseline input capabilities plus two local additions. Result:
-37 canonical capabilities (34 visible, 3 explicit-only), plus 14 hidden
+of the 35 baseline input capabilities plus four local additions. Result:
+39 canonical capabilities (36 model-visible, 3 explicit-only), plus 14 hidden
 compatibility pointers.
 
 ## Default communication density
@@ -342,3 +342,14 @@ Source basis: Anti Slop `v3.2.20`, immutable `91f12ec67e9de6043cfd93b846404986ba
 Trigger scope: explicit UI/web/style/product-copy terms plus short action/surface phrases cover settings screens, React profile pages, Vue login forms, Android/iOS screens, component restyling and navigation fixes. Platform/framework names alone do not activate. Non-UI context terms suppress ambiguous surface matches (for example documentation pages or CLI navigation), unless explicit UI/copy terms also occur. Ordinary backend/database/infrastructure/CLI/configuration/documentation/general-code and comment-cleanup requests are outside scope. This is a bounded lexical heuristic, not an intent classifier; mixed requests should name their UI/copy surface explicitly. No general code-comment trigger was added.
 
 Injection uses native OMP `before_agent_start`: return a new `systemPrompt` array preserving existing blocks and appending the exact policy once. An already-present identical policy returns no override. OMP owns continuation lifetime and next-request preparation; the extension has no session state, hidden custom-message fallback or model routing. Conceptual UI questions still receive the filter but its delivery condition explicitly excludes PASS/FAIL. The focused handler test is `node scripts/test_antislop.mjs`; policy wording review is static, not proof that a model obeys it.
+
+## Writing quality and artifact provenance
+
+Two local capabilities handle distinct user-facing needs without changing existing skill owners:
+
+| Capability | Trigger / authority | Contract and boundaries | Relationship |
+|---|---|---|---|
+| `writing-authenticity` | Explicit writing-quality review, substantial editorial analysis or requested edit; edits require authority. | Audience-fit review or targeted rewrite; preserve meaning, evidence, facts, voice, structure and uncertainty. No authorship detection, scores, fabricated detail, fixed “humanizing” rules or detector evasion. | Editorial output quality, distinct from code correctness and UI-copy filtering. Full procedure loads conditionally; routine answers do not receive a blanket pass. |
+| `content-provenance-audit` | Authorized artifact inspection/comparison. | Read-only findings distinguish observed evidence, probabilistic indicators, unsupported/not-inspected/unknown; scope, method, location and limitations required. No authorship verdict, active content execution, upload, metadata stripping, normalization or tampering. | Artifact evidence contract is distinct from external source security-intake, changed-source security-review and deep code security-audit. Local procedure includes only references; no detector/parser/verifier dependency is added. |
+
+Universal quality guidance is owned by [PERSONALITY](../config/agent/PERSONALITY.md#universal-output-quality); AGENTS owns conditional routing only. It does not introduce a mandatory quality pass. `antislop.js` and its license remain unchanged; `ui-design` remains the primary UI workflow.

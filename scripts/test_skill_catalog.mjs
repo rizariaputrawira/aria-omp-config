@@ -61,6 +61,7 @@ const canonicalNames = new Set([
   "docs-domain-modeling",
   "docs-engineering",
   "docs-plan-review",
+  "content-provenance-audit",
   "git-change-status",
   "git-commit-message",
   "git-pr-work",
@@ -82,6 +83,7 @@ const canonicalNames = new Set([
   "ui-sonner",
   "ui-stress-test",
   "ui-web-motion",
+  "writing-authenticity",
   "workflow-brainstorming",
   "workflow-delivery",
   "workflow-handoff",
@@ -115,7 +117,7 @@ for (const path of entries.filter(p => /^config\/agent\/skills\/[^/]+\/SKILL\.md
   } else {
     assert.ok(canonicalNames.has(parsed.name), `unexpected canonical: ${parsed.name}`);
     assert.equal(hidden, hiddenCanonical.has(parsed.name), `${path}: changed canonical exposure`);
-    assert.ok(/^(ui|code|docs|workflow|git|security|agent)-/.test(parsed.name) || ["swift-development", "stitch-design-input", "brand-concepts"].includes(parsed.name), `${path}: functional family required`);
+    assert.ok(/^(ui|code|docs|workflow|git|security|agent|writing|content)-/.test(parsed.name) || ["swift-development", "stitch-design-input", "brand-concepts"].includes(parsed.name), `${path}: functional family required`);
   }
   identities.set(parsed.name, { base: dirname(join(root, path)), hidden });
 }
