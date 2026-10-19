@@ -29,6 +29,8 @@ Define the user-relevant slow operation/workload and available baseline. Use act
 
 Once the causal explanation is supported, change the root source/invariant within the user's requested scope and applicable native constraints. Inspect affected callers so the correction is not a one-path workaround. Preserve unrelated user changes. Add meaningful regression coverage at the seam that exercises the real pattern; ordinary regression work does not automatically invoke TDD. If test-first is requested, load `skill://code-tdd`.
 
+If you deliberately force a test red by mutating code or a fixture, compare it with a pristine copy and verify the intended mutation landed before treating the failure as evidence.
+
 For a requested permanent fix, report original consumer-path proof and finding-specific regression evidence, not only a shallow helper test. Execution belongs to the assigned executor/integration owner; workers do not duplicate gates. Remove temporary instrumentation/artifacts you introduced, update applicable permanent documentation, and report exact changes and observed checks. If source correction is complete but the original path cannot be exercised, mark that proof unverified and name the precise missing evidence.
 
 Finish with symptom/source basis, hypothesis dispositions, root cause or remaining uncertainty, correction boundary, actual original-path/regression evidence and limitations. Investigation alone needs no new tests/docs.

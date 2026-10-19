@@ -70,10 +70,42 @@ try {
     else incomplete.current_assessment[field] = value;
     assert.equal(classify({ version: "18.8.9", record: incomplete, config, payloadSha256, promptMode: "known-patched" }).status, "NOT VERIFIED", `current assessment ${field} is required`);
   }
-  assert.equal(good({ hardCriticalChanges: [HARD_CRITICAL_PATHS[0]] }).status, "REVIEW REQUIRED");
-  const watched = good({ watchedChanges: [WATCHED_PATHS[0]] });
-  assert.equal(watched.status, "REVIEW REQUIRED");
-  assert.match(watched.reason, /no implied routing-architecture invalidation/);
+  const changedPath = HARD_CRITICAL_PATHS[0];
+  const matchingReview = sourceEvidenceSha256 => ({
+    baseline_revision: verifiedRecord.source_reviewed.revision,
+    candidate_revision: "candidate-revision",
+    changed_paths: [changedPath],
+    source_evidence_sha256: sourceEvidenceSha256,
+    disposition: "compatible-no-adaptation",
+    criticality: "reviewed-contract-unaffected",
+  });
+  const sourceReview = { candidateRevision: "candidate-revision", sourceEvidenceSha256: "a".repeat(64) };
+  const reviewed = structuredClone(verifiedRecord);
+  reviewed.source_change_review = matchingReview(sourceReview.sourceEvidenceSha256);
+  assert.equal(good({ record: reviewed, hardCriticalChanges: [changedPath], sourceReview }).status, "VERIFIED", "exactly bound harmless critical drift can reuse the still-matching scoped receipt");
+  const unspecifiedCriticality = structuredClone(reviewed);
+  delete unspecifiedCriticality.source_change_review.criticality;
+  assert.equal(good({ record: unspecifiedCriticality, hardCriticalChanges: [changedPath], sourceReview }).status, "REVIEW REQUIRED", "critical drift is not accepted without explicit contract applicability");
+  assert.equal(good({ hardCriticalChanges: [changedPath], sourceReview }).status, "REVIEW REQUIRED", "candidate data without a recorded review disposition stays fail-safe");
+  assert.equal(good({ record: reviewed, hardCriticalChanges: [changedPath], sourceReview: { ...sourceReview, candidateRevision: "stale-revision" } }).status, "REVIEW REQUIRED", "stale candidate revision is rejected");
+  const staleEvidence = structuredClone(reviewed);
+  staleEvidence.source_change_review.source_evidence_sha256 = "b".repeat(64);
+  assert.equal(good({ record: staleEvidence, hardCriticalChanges: [changedPath], sourceReview }).status, "REVIEW REQUIRED", "mismatched source evidence digest is rejected");
+  assert.equal(good({ record: reviewed, hardCriticalChanges: [changedPath], sourceReview, watchedChanges: [WATCHED_PATHS[0]] }).status, "REVIEW REQUIRED", "changed path set mismatch is rejected");
+  const optionalImprovement = structuredClone(reviewed);
+  optionalImprovement.source_change_review.disposition = "optional-improvement";
+  assert.equal(good({ record: optionalImprovement, hardCriticalChanges: [changedPath], sourceReview }).status, "VERIFIED", "optional improvement failure does not block otherwise accepted scoped evidence");
+  for (const disposition of ["focused-verification", "required-adaptation", "material-evidence-gap"]) {
+    const pending = structuredClone(reviewed);
+    pending.source_change_review.disposition = disposition;
+    assert.equal(good({ record: pending, hardCriticalChanges: [changedPath], sourceReview }).status, "REVIEW REQUIRED", `${disposition} does not imply compatibility acceptance`);
+  }
+  const incompatibleReview = structuredClone(reviewed);
+  incompatibleReview.source_change_review.disposition = "incompatible-mandatory-requirement";
+  assert.equal(good({ record: incompatibleReview, hardCriticalChanges: [changedPath], sourceReview }).status, "INCOMPATIBLE");
+  const unclassified = structuredClone(reviewed);
+  unclassified.source_change_review.disposition = "made-up";
+  assert.equal(good({ record: unclassified, hardCriticalChanges: [changedPath], sourceReview }).status, "REVIEW REQUIRED");
   assert.equal(good({ promptMode: "unknown" }).status, "REVIEW REQUIRED");
   assert.equal(good({ payloadSha256: "0".repeat(64) }).status, "NOT VERIFIED");
   const structured = structuredClone(config);
@@ -149,7 +181,7 @@ const unchanged = await compareTrackedSources("base", "candidate", [HARD_CRITICA
   sameCalls.push(url);
   return new Response("same exact upstream source");
 });
-assert.deepEqual(unchanged, { hardCriticalChanges: [], watchedChanges: [] });
+assert.deepEqual(unchanged, { hardCriticalChanges: [], watchedChanges: [], sourceEvidenceSha256: createHash("sha256").update("[]").digest("hex") });
 assert.equal(sameCalls.length, 2, "exact tracked file comparison fetches only baseline/candidate file content");
 assert.ok(sameCalls.every(url => url.includes("raw.githubusercontent.com") && !url.includes("/compare/")), "GitHub compare endpoint and its changed-file truncation are not required");
 

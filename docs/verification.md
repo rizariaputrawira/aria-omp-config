@@ -343,6 +343,103 @@ No target-system network activity, credential inspection/change, runtime
 upgrade, production activation or installation occurred. Normal trusted model
 transport for the source reviewers is a separate boundary.
 
+## OMP 18.12.2 scoped source and evidence reconciliation — 2026-10-19
+
+**Status: VERIFIED only for the scoped source assessment and reused evidence
+below; not a fresh 18.12.2 authenticated runtime pass.** The exact comparison
+covers all 22 hard-critical and 8 watched tracked paths from 18.12.1
+(`291e055836c210f314af3f73f53244e8e9d09de8`) to the official 18.12.2 release
+(`1d5aff90b057ce7dbfe32ea557a527c1b3144b72`). Its changed-path digest is
+`3998e01a2fa0835d85818b1534bdd360ca10798ad228fd197f5a0dcc09b836225`.
+The exact changed paths were `packages/coding-agent/src/main.ts`,
+`packages/coding-agent/src/task/executor.ts`, and
+`packages/coding-agent/src/tools/bash.ts`; the 27 other tracked paths were
+unchanged.
+
+The bounded source review found the `main.ts` extension-provider model-list
+rebuild applies to configured `--models` / `enabledModels` scopes, which this
+managed configuration does not use. The `executor.ts` change counts
+server-side streaming tool steps toward `task.softRequestBudget`, which this
+configuration does not set and whose observed code path is Cursor-specific.
+The `bash.ts` change reuses a session shell for foreground-started asynchronous
+jobs, falling back to a temporary shell when busy; this changes shell-state
+and job-scheduling behavior, not command-approval policy. No reviewed
+Sol/Luna role, worker, discovery, extension-boundary or approval contract
+change was found. The shell scheduling behavior remains a compatibility
+boundary to consider when those features are used; it does not imply per-command
+shell isolation or alter the managed approval patterns.
+
+The checker’s source disposition is bounded to that exact baseline, candidate,
+changed-path set and source-evidence digest. The source review also reused the
+independent review of the nine added instruction lines across `AGENTS.md` and
+`PERSONALITY.md`: those conditional editorial/provenance pointers and output
+quality guidance do not change model identity, director authority, delegation
+permissions, security or approval procedures, tool admission, or core coding
+acceptance gates. The review establishes no fresh instruction-behavior result.
+
+### Evidence reuse and limits
+
+All non-Plan gate values in the current assessment are reused from their
+originally accepted evidence, not freshly executed at 18.12.2:
+
+- `director_luna_sol_core`: the accepted **18.11.0 CORE PILOT** and the scoped
+  18.12.1 evidence remain at their recorded versions and limits (see the
+  2026-10-19 Sol-director continuation below). No core pilot was replayed.
+- `targeted_messaging_uri` and
+  `fresh_init_final_input_registration_model_role`: reuse the scoped 18.12.1
+  receipts cited by that continuation; no new 18.12.2 runtime claim is made.
+- `approval_reviewer_authority` and `option_b_security_review`: reuse the
+  bounded native Option B evidence and its independent source/runtime reviews
+  recorded there. It does not cryptographically bind execution to a selected
+  definition or establish OS isolation or whole-system security. The
+  documented combined-selector denial remains a fail-closed parser limitation;
+  the previously prohibited compound-grep result is not reclassified as
+  conformant evidence.
+- `independent_acceptance`: reuse the accepted bounded independent integration
+  and security review records cited in the continuation; source reviews of
+  18.12.2 and the instruction delta are not authenticated runtime acceptance.
+- `plan_boundary`: remains `DEFERRED_UNAVAILABLE` under the user-authorized
+  deferral below. Plan was not tested and is not supported by this assessment.
+
+The current managed payload is
+`60c95060e3ae8c68a89984acf42377294bf8aaa782e6e465870ba0d6cd6a6962`.
+The previously accepted 18.12.1 receipt remains historically correct for the
+payload at its introduction (`3942d62fabbc501f641903ae9d5c4d67583bc60f`,
+`ef1d11c044cb9365af1648353b62845816de7eb92761a740b5d57716441f81e7`).
+Since then, only `AGENTS.md` and `PERSONALITY.md` changed among the 14
+fingerprinted inputs; the other 12 match. The independent source review found
+their nine added lines do not alter the previously assessed contract, allowing
+the existing scoped evidence to be reused without relabeling its original
+version or execution mode. This source-based reconciliation does not convert
+the historical receipt into a new authenticated runtime receipt.
+
+The conditional path TOCTOU concern remains `needs-validation`, without
+severity, confirmation or a `fixed` claim. The bounded source comparison does
+not resolve it. The installer collision fixture has a fixed clock and its
+focused scenario passed once. An earlier full-suite run with D: `TMPDIR` timed
+out after 900 seconds; a later run used the materially different Linux ext4
+`/var/tmp` (`/dev/sdd`, 952,277,680 KiB available; `/tmp` was a full tmpfs).
+`TMPDIR=/var/tmp python3 scripts/test_install.py` exited 0 in 155.64 seconds.
+Its exact output was:
+
+> PowerShell runtime available (`powershell.exe`); this POSIX runner does not
+> execute the separate PowerShell tests.
+> POSIX installer/doctor integration checks passed for 300 inventory entries.
+
+**Current POSIX installer/doctor suite status: PASS for 300 inventory entries.**
+The earlier timeout and pre-correction failures remain historical outcomes;
+this successful run does not establish PowerShell/native Windows behavior.
+No production installation, runtime update, promotion, credential change,
+model call, Plan experiment, core-pilot replay, or new authenticated runtime
+case occurred.
+
+The compatibility record’s `source_reviewed` baseline now names the actual
+18.12.2 source reviewed above; `source_change_review` preserves the exact
+18.12.1-to-18.12.2 comparison and its disposition for future checker runs.
+The current assessment is a scoped synthesis of source review, deterministic
+checks and reused version-scoped evidence—not a claim that all gates were
+freshly exercised on 18.12.2.
+
 ## Sol-director candidate local assessment — 2026-10-18
 This is the retained checkpoint; the 2026-10-19 continuation above is current.
 

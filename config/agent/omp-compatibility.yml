@@ -1,10 +1,20 @@
 schema: 1
 project: omp-docflow
 source_reviewed:
-  omp_version: 18.12.1
+  omp_version: 18.12.2
   channel: stable
-  revision: 291e055836c210f314af3f73f53244e8e9d09de8
-  date: 2026-10-18
+  revision: 1d5aff90b057ce7dbfe32ea557a527c1b3144b72
+  date: 2026-10-19
+source_change_review:
+  baseline_revision: 291e055836c210f314af3f73f53244e8e9d09de8
+  candidate_revision: 1d5aff90b057ce7dbfe32ea557a527c1b3144b72
+  changed_paths:
+    - packages/coding-agent/src/main.ts
+    - packages/coding-agent/src/task/executor.ts
+    - packages/coding-agent/src/tools/bash.ts
+  source_evidence_sha256: 3998e01a2fa0835d85818b1534bdd360ca10798ad228fd197f5a0dcc09b836225
+  disposition: compatible-no-adaptation
+  criticality: reviewed-contract-unaffected
 consultation_append_sha256: 7d30f77910426d485b48b034ff4d1bccddbbbf388cd9643b416b5ecbd4cfb600
 last_verified:
   omp_version: 18.8.9
@@ -35,12 +45,12 @@ critical_behavior:
   - sol-executor
   - plan-mode-sol-director
 current_assessment:
-  omp_version: 18.12.1
-  revision: 291e055836c210f314af3f73f53244e8e9d09de8
-  evidence: docs/verification.md#sol-director-production-candidate-continuation--2026-10-19
+  omp_version: 18.12.2
+  revision: 1d5aff90b057ce7dbfe32ea557a527c1b3144b72
+  evidence: docs/verification.md#omp-18-12-2-scoped-source-and-evidence-reconciliation--2026-10-19
   date: 2026-10-19
   mode: known-patched
-  payload_sha256: ef1d11c044cb9365af1648353b62845816de7eb92761a740b5d57716441f81e7
+  payload_sha256: 60c95060e3ae8c68a89984acf42377294bf8aaa782e6e465870ba0d6cd6a6962
   status: VERIFIED
   gates:
     director_luna_sol_core: PASS

@@ -2,7 +2,6 @@
 """Integration checks for the inventory-driven POSIX installer and doctor."""
 from __future__ import annotations
 
-import datetime as dt
 from functools import partial
 import http.server
 import os
@@ -224,19 +223,27 @@ def main() -> None:
 
         # Changed files get a collision-safe backup preserving old content.
         target.write_bytes(b"prior user bytes\n")
-        collision_stamps = []
-        now = dt.datetime.now(dt.timezone.utc)
-        for offset in range(11):
-            stamp = (now + dt.timedelta(seconds=offset)).strftime("%Y%m%dT%H%M%SZ")
-            collision = Path(f"{target}.bak.{stamp}")
-            collision.write_bytes(b"pre-existing backup\n")
-            collision_stamps.append(collision)
-        result = run("sh", str(INSTALL), "--source", str(source), "--home", str(home))
+        date_bin = tmp / "fixed-date-bin"
+        date_bin.mkdir()
+        fake_date = date_bin / "date"
+        fake_date.write_text(
+            "#!/bin/sh\n"
+            "[ \"$#\" -eq 2 ] && [ \"$1\" = \"-u\" ] && [ \"$2\" = \"+%Y%m%dT%H%M%SZ\" ] || exit 2\n"
+            "printf '%s\\n' '20300101T000000Z'\n",
+            encoding="utf-8",
+        )
+        fake_date.chmod(0o755)
+        collision = Path(f"{target}.bak.20300101T000000Z")
+        collision.write_bytes(b"pre-existing backup\n")
+        result = run(
+            "sh", str(INSTALL), "--source", str(source), "--home", str(home),
+            env={**os.environ, "PATH": f"{date_bin}{os.pathsep}{os.environ['PATH']}"},
+        )
         assert target.read_bytes() == (ROOT / "config/agent/config.yml").read_bytes()
         backup_lines = [line[len("backup: "):] for line in result.stdout.splitlines() if line.startswith(f"backup: {target}.bak.")]
         assert len(backup_lines) == 1 and backup_lines[0].endswith(".1")
         assert Path(backup_lines[0]).read_bytes() == b"prior user bytes\n"
-        assert all(path.read_bytes() == b"pre-existing backup\n" for path in collision_stamps)
+        assert collision.read_bytes() == b"pre-existing backup\n"
 
         # Failures in late payload or unsafe inventory are rejected before early writes.
         run("sh", str(INSTALL), "--source", str(source / "not-a-source"), "--home", str(home), expected=2)

@@ -15,6 +15,14 @@ The files below are authored adaptations, not upstream executable distributions.
 |[`LICENSE`](https://raw.githubusercontent.com/mattpocock/skills/d81f3a183412e71a5b1e84ca21bc1a35eea03a60/LICENSE)|`config/agent/skills/code-debugging/LICENSE.matt`|Full upstream notice, unmodified retrieved text.|`LICENSE.matt`|
 |[`LICENSE`](https://raw.githubusercontent.com/obra/superpowers/8ca22dba9a94f28898bbce59f2537ff4d87c747d/LICENSE)|`config/agent/skills/code-debugging/LICENSE.superpowers`|Full upstream notice, unmodified retrieved text.|`LICENSE.superpowers`|
 
+Selective supplement: [`skills/engineering/diagnosing-bugs/SKILL.md` at
+`49dd158d1076134a641b33efb035946536778336`](https://raw.githubusercontent.com/mattpocock/skills/49dd158d1076134a641b33efb035946536778336/skills/engineering/diagnosing-bugs/SKILL.md)
+→ `config/agent/skills/code-debugging/SKILL.md`, Root correction and evidence:
+verify an intentional forced-red mutation against pristine state before trusting
+the failure. The complete baseline-to-candidate diff adds precisely this check.
+Candidate LICENSE is byte-identical to `LICENSE.matt`; no other candidate
+procedure or package refresh is adopted.
+
 ## Local modifications and removed incompatibilities
 
 Removed inspiration-only body, confirm-the-user reruns, upstream no-hypotheses-without-runtime ban, forced 3-5 hypotheses, fixed stress/retry rates, bisection/HITL executables, shell pipelines and blanket defense layers. No root-cause claims from plausible source alone, no invented performance metrics. Preserve original-path proof requirement for permanent fixes; source-only inquiry may return labeled hypotheses. Waiting uses project predicates/timeouts, not shipped 10ms/5s helpers.

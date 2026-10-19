@@ -134,13 +134,24 @@ export function escalationPayloadHash(agentDir) {
   return createHash("sha256").update(JSON.stringify(entries), "utf8").digest("hex");
 }
 
-export function classify({ version, record, config, payloadSha256, hardCriticalChanges = [], watchedChanges = [], promptMode = "unknown" }) {
+export function classify({ version, record, config, payloadSha256, hardCriticalChanges = [], watchedChanges = [], sourceReview, promptMode = "unknown" }) {
   try { validateRecord(record); validateConfig(config); }
   catch (error) { return { status: "INCOMPATIBLE", mode: "unknown", reason: error.message, hardCriticalChanges, watchedChanges }; }
   if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version ?? "")) return { status: "NOT VERIFIED", mode: promptMode, reason: "OMP version is unknown or not a released semantic version", hardCriticalChanges, watchedChanges };
   if (config?.task?.structured === true) return { status: "REVIEW REQUIRED", mode: promptMode, reason: "structured task results require session-specific strict-schema verification", hardCriticalChanges, watchedChanges };
-  if (hardCriticalChanges.length) return { status: "REVIEW REQUIRED", mode: promptMode, reason: "a hard-critical OMP contract changed; review or runtime evidence is required for those surfaces", hardCriticalChanges, watchedChanges };
-  if (watchedChanges.length) return { status: "REVIEW REQUIRED", mode: promptMode, reason: "only watched OMP surfaces changed; run focused checks for those surfaces, with no implied routing-architecture invalidation", hardCriticalChanges, watchedChanges };
+  const changedPaths = [...hardCriticalChanges, ...watchedChanges].sort();
+  if (changedPaths.length) {
+    const review = record.source_change_review;
+    const reviewMatches = sourceReview && review?.baseline_revision === record.source_reviewed.revision &&
+      review?.candidate_revision === sourceReview.candidateRevision &&
+      JSON.stringify(review?.changed_paths) === JSON.stringify(changedPaths) &&
+      review?.source_evidence_sha256 === sourceReview.sourceEvidenceSha256 &&
+      ["compatible-no-adaptation", "focused-verification", "optional-improvement", "required-adaptation", "material-evidence-gap", "incompatible-mandatory-requirement"].includes(review?.disposition);
+    if (!reviewMatches) return { status: "REVIEW REQUIRED", mode: promptMode, reason: "tracked OMP source changed; exact-source review disposition is absent or stale", hardCriticalChanges, watchedChanges };
+    if (review.disposition === "incompatible-mandatory-requirement") return { status: "INCOMPATIBLE", mode: promptMode, reason: "source review found a mandatory requirement incompatibility", hardCriticalChanges, watchedChanges };
+    if (review.disposition !== "compatible-no-adaptation" && review.disposition !== "optional-improvement") return { status: "REVIEW REQUIRED", mode: promptMode, reason: `source review disposition requires further action: ${review.disposition}`, hardCriticalChanges, watchedChanges };
+    if (hardCriticalChanges.length && review.criticality !== "reviewed-contract-unaffected") return { status: "REVIEW REQUIRED", mode: promptMode, reason: "hard-critical drift requires an explicit finding that the reviewed contract is unaffected", hardCriticalChanges, watchedChanges };
+  }
   if (promptMode === "unknown" || promptMode === "incompatible") return { status: "REVIEW REQUIRED", mode: promptMode, reason: "the effective prompt does not establish the managed Candidate C append and native prompt", hardCriticalChanges, watchedChanges };
   const assessment = record.current_assessment;
   const planDeferred = assessment?.gates?.plan_boundary === "DEFERRED_UNAVAILABLE" &&
@@ -198,16 +209,28 @@ export function resolvePromptDiscovery({ cwd, agentDir, home = homedir(), enable
 
 export async function compareTrackedSources(baseRevision, candidateRevision, paths = ALL_PATHS, fetchImpl = fetch) {
   const changed = [];
+  const evidence = [];
   for (const path of paths) {
     const [baseResponse, candidateResponse] = await Promise.all([
       fetchImpl(`https://raw.githubusercontent.com/${REPOSITORY}/${baseRevision}/${path}`),
       fetchImpl(`https://raw.githubusercontent.com/${REPOSITORY}/${candidateRevision}/${path}`),
     ]);
     if (!baseResponse.ok || !candidateResponse.ok) throw new Error(`cannot compare tracked source ${path} (baseline ${baseResponse.status}, candidate ${candidateResponse.status})`);
-    const [baseBytes, candidateBytes] = await Promise.all([baseResponse.arrayBuffer(), candidateResponse.arrayBuffer()]);
-    if (!Buffer.from(baseBytes).equals(Buffer.from(candidateBytes))) changed.push(path);
+    const baseBytes = Buffer.from(await baseResponse.arrayBuffer());
+    const candidateBytes = Buffer.from(await candidateResponse.arrayBuffer());
+    const baseHash = createHash("sha256").update(baseBytes).digest("hex");
+    const candidateHash = createHash("sha256").update(candidateBytes).digest("hex");
+    if (baseHash !== candidateHash) {
+      changed.push(path);
+      evidence.push([path, baseHash, candidateHash]);
+    }
   }
-  return { hardCriticalChanges: changed.filter(path => HARD_CRITICAL_PATHS.includes(path)), watchedChanges: changed.filter(path => WATCHED_PATHS.includes(path)) };
+  const changedPaths = changed.sort();
+  return {
+    hardCriticalChanges: changedPaths.filter(path => HARD_CRITICAL_PATHS.includes(path)),
+    watchedChanges: changedPaths.filter(path => WATCHED_PATHS.includes(path)),
+    sourceEvidenceSha256: createHash("sha256").update(JSON.stringify(evidence.sort(([a], [b]) => a.localeCompare(b)))).digest("hex"),
+  };
 }
 
 async function resolveCommit(version) {
@@ -291,14 +314,19 @@ async function main() {
   const baseline = record.source_reviewed;
   let hardCriticalChanges = [];
   let watchedChanges = [];
+  let sourceReview;
   let candidateRevision;
   try {
     if (args.candidate || version !== baseline.omp_version) {
       candidateRevision = await resolveCommit(version);
-      if (candidateRevision !== baseline.revision) ({ hardCriticalChanges, watchedChanges } = await compareTrackedSources(baseline.revision, candidateRevision));
+      if (candidateRevision !== baseline.revision) {
+        const comparison = await compareTrackedSources(baseline.revision, candidateRevision);
+        ({ hardCriticalChanges, watchedChanges } = comparison);
+        sourceReview = { candidateRevision, sourceEvidenceSha256: comparison.sourceEvidenceSha256 };
+      }
     }
   } catch (error) { console.log(`OMP compatibility: NOT VERIFIED\n${error.message}`); process.exitCode = 2; return; }
-  const result = classify({ version, record, config, payloadSha256, hardCriticalChanges, watchedChanges, promptMode: prompt.mode });
+  const result = classify({ version, record, config, payloadSha256, hardCriticalChanges, watchedChanges, sourceReview, promptMode: prompt.mode });
   let mainChanges;
   if (args.inspectMain) {
     try {
@@ -314,8 +342,9 @@ async function main() {
   console.log(`Version: ${version}`);
   console.log(`Source baseline: ${baseline.omp_version} (${baseline.revision})`);
   if (candidateRevision) console.log(`Candidate revision: ${candidateRevision}`);
+  if (sourceReview) console.log(`Changed-source evidence SHA-256: ${sourceReview.sourceEvidenceSha256}`);
   if (result.hardCriticalChanges.length) console.log(`Changed hard-critical surfaces:\n${result.hardCriticalChanges.map(path => `- ${path}`).join("\n")}`);
-  if (result.watchedChanges.length) console.log(`Changed watched surfaces (focused checks only):\n${result.watchedChanges.map(path => `- ${path}`).join("\n")}`);
+  if (result.watchedChanges.length) console.log(`Changed watched surfaces:\n${result.watchedChanges.map(path => `- ${path}`).join("\n")}`);
   if (mainChanges) {
     console.log(`Unreleased upstream main: ${mainChanges.revision}`);
     console.log(`Main hard-critical changes: ${mainChanges.hardCriticalChanges.length ? mainChanges.hardCriticalChanges.join(", ") : "none"}`);

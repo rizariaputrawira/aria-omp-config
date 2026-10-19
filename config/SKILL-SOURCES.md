@@ -23,7 +23,7 @@ the named package record:
 | `[Matt+Superpowers]` | Matt Pocock's `mattpocock/skills` and Jesse Vincent's `obra/superpowers` | `agent-guidance`, `code-debugging`, `code-review`, `code-tdd`, `workflow-brainstorming`, `workflow-delivery`; exact paths, pinned revisions, mapped merges and MIT notices are in each skill's `SOURCES.md`. |
 | `[Matt Pocock]` | Matt Pocock's `mattpocock/skills` | `docs-domain-modeling`; exact pinned paths and MIT notice are in its `SOURCES.md`. |
 | `[Open GSD]` | Open GSD's `open-gsd/gsd-core` | `docs-engineering`, `docs-plan-review`, `workflow-delivery`, `workflow-handoff`, `workflow-handoff-read`, `workflow-retrospective`; exact path maps, pinned revision and MIT notices are in package `SOURCES.md` files. |
-| `[Emil Kowalski]` | Emil Kowalski's `emilkowalski/skills` | `swift-development`, `ui-expo-motion`, `ui-gesture-design`, `ui-library-selection`, `ui-mobile-web`, `ui-prototyping`, `ui-sonner`, `ui-stress-test`; `ui-web-motion` uses only Emil-derived `RECIPES.md`, while its core and other local references are independently authored. Exact compared source paths, revision, notices and historical-import limits are in package `SOURCES.md` files. |
+| `[Emil Kowalski]` | Emil Kowalski's `emilkowalski/skills` | `swift-development`, `ui-expo-motion`, `ui-gesture-design`, `ui-library-selection`, `ui-mobile-web`, `ui-prototyping`, `ui-sonner`, `ui-stress-test`; `ui-web-motion` uses Emil-derived `RECIPES.md` and one selectively adapted performance diagnostic paragraph, with the rest independently authored. Exact compared source paths, revisions, notices and historical-import limits are in package `SOURCES.md` files. |
 | `[Taste]` | Leonxlnx's `Leonxlnx/taste-skill` | `brand-concepts`, `ui-image-generation`, `ui-image-to-code`; exact compared source paths, revision, notices and historical-import limits are in package `SOURCES.md` files. |
 | `[Impeccable]` | Paul Bakaus's `pbakaus/impeccable` | `ui-design`; entrypoint, retained references/scripts, nested attribution and license boundaries are detailed below and in `config/agent/skills/ui-design/NOTICE.md`. |
 | `[NVIDIA]` | NVIDIA's `NVIDIA/SkillSpector` | `security-intake`; exact pinned source mapping and Apache-2.0 notice are in its `SOURCES.md`. |
@@ -73,8 +73,9 @@ local snapshot dates do not prove when/from which upstream commit copying occurr
 Notice scope: each Emil/Taste-derived distributed package carries its complete
 unchanged MIT notice. The merged image-generation package maps both web/mobile
 source procedures under the Taste notice. ui-web-motion/LICENSE.emil covers its
-retained RECIPES.md only; its core and other local references remain independently
-authored. Impeccable owns no Emil/Taste payload merely because UI routing selects it.
+retained RECIPES.md and the selective performance diagnostic identified in its
+SOURCES.md; the rest remains independently authored. Impeccable owns no
+Emil/Taste payload merely because UI routing selects it.
 
 **Stitch remains SOURCE UNCERTAIN.** Its current locally rewritten SKILL.md and
 DESIGN.md have insufficient matching expression at the inspected Taste pin to
@@ -126,6 +127,64 @@ Revision `baff03e456864470db3ba8acebc41a003cbfa541` pins inspected license
 evidence only, not the original body used by Impeccable. That body/license
 baseline and broader rights in underlying platform-source material remain
 UNVERIFIED. Notice preservation is not comprehensive redistribution clearance.
+
+## Selective investigation closure — 2026-10-18
+
+This is a mapped-asset comparison and selective text adaptation, not a package,
+engine, host, model, permission or service upgrade. Existing package SOURCES maps
+remain the baseline owners; the additional pins below identify only the selected
+supplements. No historical import is inferred from a comparison pin.
+
+Complete source-only Git-object comparisons, local SHA-256 manifests and unified
+diffs are retained in `/home/personal/.omp-upstream-sg_i6kn8/` (`manifest.json`,
+`matt-diffs.txt`, `gsd-diffs.txt`, `ui-diffs.txt`, `ui-agent-diffs.txt`,
+`ui-local-diffs.txt` and local comparison corpora). This machine-local evidence is
+not deployed or required at runtime. Initial partial worker receipts were not
+accepted; the executor closed their coverage gaps with uncapped immutable trees.
+Actual scenario/check evidence is recorded in [verification](../docs/verification.md#selective-upstream-guidance-and-github-mcp-refresh).
+
+| Source / exact comparison interval | Complete mapped scope and terms | Disposition |
+|---|---|---|
+| [Matt Pocock](https://github.com/mattpocock/skills/tree/49dd158d1076134a641b33efb035946536778336): `d81f3a183412e71a5b1e84ca21bc1a35eea03a60` → `49dd158d1076134a641b33efb035946536778336` | All 13 distinct mapped bodies, 15 distinct local bodies across the seven package SOURCES maps, plus LICENSE and all seven local notices. Five source bodies changed; eight did not. MIT LICENSE is byte-identical at both pins and to the distributed notices. | **adopt**, medium: only the new pristine-state forced-red mutation check in code-debugging. TDD seam coverage is already expressed locally; review tracker/forced delegation, ticket publishing and grilling's yes-template offer no compatible missing behavior. |
+| [Open GSD stable](https://github.com/open-gsd/gsd-core/tree/962c1192e062b5278281cd3a7bfd671a67a4db44) and [next](https://github.com/open-gsd/gsd-core/tree/030e7ca2084ee39b4b0519d630a2ee16fdd370ef): `69f890fc36e6cfc90f2b1fcebb502ef76bbe8aa8` → stable `962c1192e062b5278281cd3a7bfd671a67a4db44` / next `030e7ca2084ee39b4b0519d630a2ee16fdd370ef` | All 12 distinct mapped bodies at all three pins, 15 distinct local bodies across six SOURCES maps, plus LICENSE and six local notices. Stable changes three bodies; next changes six. MIT LICENSE and local notices remain byte-identical. | **no-action**, low: runtime bootstrap/argument/discovery changes are not local passive procedures. Already-settled decisions and static command/proof adequacy are covered. Next's instruction to run count/match gates conflicts with the local plan reviewer's no-execution contract; do not import it. |
+| [Ponytail](https://github.com/DietrichGebert/ponytail/tree/09c434ab73ca43761c5d8b0c5d341926c2fba710): historical body baseline **unknown**; candidate `09c434ab73ca43761c5d8b0c5d341926c2fba710` | Local code-simplicity SKILL.md, references/complexity-review.md, references/debt-ledger.md and LICENSE.ponytail compared with candidate skills/ponytail, ponytail-review, ponytail-audit, ponytail-debt and ponytail-help SKILL.md, README and LICENSE. Initial local snapshot `57f3484c8043ec42d72b89f7dd1e48b31697850f` records installed roots, not upstream body origin. `dbdfc8de29fb91609ed2df2ae378782a956d8e86` remains LICENSE-only evidence. Candidate MIT text matches the retained notice. | **blocked**, significance unassessed: do not refresh without authoritative historical body lineage and applicable original source terms. Candidate broadens review/audit to general quality/security, adds shortcut markers and host persistence/UI; these are not evidence of changes since an unknown baseline. Existing content and notice retained. |
+| [Impeccable](https://github.com/pbakaus/impeccable/tree/8a0e198da34ebc5b936a9d5975fb7a3b1cf353b7): skill 4.5.0 `508d7e8955de3b3caf2d8676e85206723d41a887` → skill 4.6.0 `8a0e198da34ebc5b936a9d5975fb7a3b1cf353b7` | All 73 local package entries reconciled: 64 upstream mappings at both pins and nine explicitly separate local supplements/notices. Seventeen upstream-mapped entries changed; 47 did not. Apache LICENSE and root NOTICE are byte-identical, with nested rights limits unchanged. | **adopt**, medium, for two text corrections only: native critique excludes the web-only detector/overlay; visualization requires DESIGN.md only for an established world, otherwise preserving the approved direction until finish-time documentation. Keep local brief, permissions, review roles, tool boundaries and optional-ignore handling. Engine 0.1.15, scripts, launchers, seed/gate/hook/build-path procedures and aesthetic additions are not adopted; local skill/engine metadata stays 4.5.0 / 0.1.11. |
+| [ehmo/platform-design-skills](https://github.com/ehmo/platform-design-skills/tree/dc2be825d8b439caea78e9eaa8fb3ac23b0ff3e9): original adaptation-body baseline **unknown**; candidate `dc2be825d8b439caea78e9eaa8fb3ac23b0ff3e9` | Local ui-design/reference/ios.md, android.md, NOTICE.md and LICENSE.platform-design-skills; candidate README, LICENSE, skills/ios/SKILL.md and skills/android/SKILL.md. MIT copyright remains exactly `(c) 2026`, unnamed. README describes scraping/distilling Apple HIG and deriving guidance from Material/WCAG. Impeccable's two platform exports are unchanged across its compared pins. | **blocked**, significance unassessed: exact original-body/license-at-adaptation and underlying-source rights chain are still unverified. No candidate ehmo expression copied/adapted; existing bodies and notice preserved. Parent attribution is not clearance. |
+| [Emil Kowalski](https://github.com/emilkowalski/skills/tree/2d228630ba1446365f614a108cb8252f1feda202): comparison `e8a175de22ae1e49370fc144c1f3bb9aeedf988d` → `2d228630ba1446365f614a108cb8252f1feda202` for ui-web-motion/RECIPES.md; new animation-performance candidate inspected separately | Candidate skills/animate/RECIPES.md compared in full with the prior source and local RECIPES.md; no source recipe delta. New skills/animation-performance/SKILL.md and LICENSE compared with existing local core, build, principles, review and recipes. Candidate MIT text matches LICENSE.emil. Historical import remains unknown. Other Emil packages are outside this candidate-supplement scope. | **adopt**, medium: one performance diagnostic paragraph in references/review-standards.md, mapped by package SOURCES.md. Missing busy-main-thread/React frame-update diagnostic is conditional on actual recording and installed platform behavior. Do not import blanket compositor guarantees, shorthand-driver assumptions, blur thresholds or will-change prescriptions. No standalone skill. |
+
+### Impeccable exact path-map rule and selective modifications
+
+At both compared Impeccable pins, the source map for every local
+`config/agent/skills/ui-design/<relative-path>` in `config/files.tsv` is:
+
+- `LICENSE` and `NOTICE.md` → the same repository-root paths.
+- All five files under `agents/` → `.agents/skills/impeccable/<relative-path>`.
+  These are retained provider assets, not newly registered OMP agent definitions.
+- `SKILL.md`, every upstream-derived file under `reference/` and every file
+  under `scripts/` → `.pi/skills/impeccable/<relative-path>`.
+- The nine exceptions, not candidate Impeccable bodies, are the seven files
+  under `reference/local/`, `reference/open-design.md`, and the separately
+  attributed `LICENSE.platform-design-skills`. No package SOURCES.md exists;
+  this existing root ledger owns this complete mapping rather than pretending
+  a missing per-package ledger was inspected.
+
+All 64 mapped paths exist at both pins; no mapped removal/rename or unexamined
+inventory entry remains. The manifest records each exact suffix and source/local
+digest. Provider exports, not `skill/reference/` source files with rule markers,
+are the comparison basis. The scripts comparison includes VERSION, both
+launchers, command metadata, both font-index data files, all four live-browser
+files and modern-screenshot. Only VERSION, live-browser-dom.js and
+live-browser.js differ upstream; none is updated locally. Screenshot helper
+bytes and unresolved original covering terms remain unchanged.
+
+Selective Impeccable 4.6.0 adaptations are only
+`.pi/skills/impeccable/reference/critique.md` → local
+`reference/critique.md` (native applicability/reporting) and
+`.pi/skills/impeccable/reference/visualize.md` → local
+`reference/visualize.md` (conditional precondition and visual authority).
+Both modified files carry local-change notices. New-work's existing finish-time
+DESIGN.md rule remains correct and unchanged. This is not a refresh of nested
+platform texts, provider agents, launcher/runtime or the rest of either file.
 
 ## Independently authored material and exclusions
 

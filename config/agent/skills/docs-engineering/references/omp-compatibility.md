@@ -82,14 +82,60 @@ The compatibility record classifies the bounded set into two groups:
 discovery, model role resolver/settings, task settings/dispatch/executor/spawn
 policy and result contract, task index, native SDK/subagent RPC/provenance,
 output-schema validation/yield, Plan Mode settings/handoff, and native
-system/project prompt templates. A changed file returns `REVIEW REQUIRED`
-until its contract is reviewed or exercised; missing/unfetchable files are
-`NOT VERIFIED`.
+system/project prompt templates. A changed file triggers source-change review,
+not an automatic behavioral verdict. Missing/unfetchable files are `NOT VERIFIED`.
 
 **Watched**: extension type/runner, settings registry/config wrapper,
-approval/bash, and skill capability/discovery. A changed file asks for focused
-surface-specific checks; it does not assert that the routing architecture
-changed.
+approval/bash, and skill capability/discovery. A changed file triggers
+surface-specific review; it does not assert that routing architecture changed.
+
+The checker binds a `source_change_review` to `baseline_revision`,
+`candidate_revision`, the complete sorted `changed_paths` set and
+`source_evidence_sha256`. That digest is SHA-256 of canonical JSON path/base
+SHA-256/candidate SHA-256 tuples for the changed tracked files. Dispositions are
+`compatible-no-adaptation`, `focused-verification`, `optional-improvement`,
+`required-adaptation`, `material-evidence-gap`, or
+`incompatible-mandatory-requirement`; `criticality` is optional except hard
+critical drift requires `reviewed-contract-unaffected` before the source review
+can be treated as compatible. Stale/missing bindings fail closed. Only
+compatible/no-adaptation and optional-improvement clear the source-review
+interruption; optional improvement/failure is nonblocking. Focused checks,
+required adaptation, evidence gaps and incompatibility remain actionable and do
+not become acceptance. The binding digest establishes which exact tracked bytes
+were compared; it is not semantic review, authenticated evidence, or approval.
+The record cannot replace a current candidate assessment or authorize promotion.
+
+### Release review and maintenance workflow
+
+1. Resolve the official **latest stable release** (security support is latest
+   release only; this does not define a minimum-version range). Read its release
+   notes and relevant commits first, recording immutable baseline/candidate
+   revisions.
+2. Compare the exact bounded tracked surfaces and review only relevant diffs
+   second. Preserve the changed-path list and source-evidence digest. Use one of
+   the explicit source-review categories; hashes, unchanged commands, version
+   labels or editable prose by themselves never establish compatibility.
+3. Select the smallest deterministic source/config check for each changed
+   contract, then focused authenticated checks only when required and separately
+   authorized. Source inspection and unit fixtures are not authenticated
+   runtime evidence. Preserve every receipt's original version, mode, scope and
+   limits; reuse only unaffected scoped evidence, explicitly named as reuse,
+   never as a fresh execution.
+4. Keep source review, current candidate assessment and `last_verified`
+   history distinct. Do not automatically change `source_reviewed`, create a
+   candidate assessment, or promote a candidate. A change to either reviewed
+   source or managed escalation payload invalidates only the receipts whose
+   recorded scope/fingerprint no longer applies.
+5. Recovery restores the last-good **source baseline and matching current
+   assessment as a pair**, with the matching managed payload fingerprint;
+   never combine a baseline from one candidate with the assessment of another.
+   Recovery does not install/downgrade OMP or rewrite historical evidence.
+6. Re-run this workflow on each latest-release upgrade, any changed hard-critical
+   or watched surface, or any change to the managed requirements/config/payload
+   that the receipt covers. Once the candidate review is recorded as compatible
+   or its required action is complete, resume ordinary OMP development; this
+   evidence gate is not an upgrade service and does not block unrelated native
+   work.
 
 Unchanged bytes narrow required source review but do not prove behavior by
 themselves. A current candidate compatibility assessment may reuse scoped
